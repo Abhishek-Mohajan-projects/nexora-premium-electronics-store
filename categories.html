@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Browse NEXORA product categories - Power, Productivity, Audio, Smart Living, and Travel.">
+  <title>Categories - NEXORA</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <div class="header-wrapper"></div>
+
+  <main class="page">
+    <div class="page-header">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html">Home</a>
+        <span aria-hidden="true">/</span>
+        <span>Categories</span>
+      </nav>
+      <h1>Product Categories</h1>
+    </div>
+    <div class="container">
+      <div class="categories-page-grid" id="categories-grid"></div>
+    </div>
+  </main>
+
+  <div class="footer-wrapper"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/data/categories.js"></script>
+  <script src="js/data/products.js"></script>
+  <script src="js/services/productService.js"></script>
+  <script src="js/services/cartService.js"></script>
+  <script src="js/services/wishlistService.js"></script>
+  <script src="js/services/authService.js"></script>
+  <script src="js/services/orderService.js"></script>
+  <script src="js/components/toast.js"></script>
+  <script src="js/components/modal.js"></script>
+  <script src="js/components/productCard.js"></script>
+  <script src="js/components/header.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      initHeader();
+      APP.init();
+
+      const grid = document.getElementById("categories-grid");
+      grid.innerHTML = CATEGORIES.map(cat => {
+        const products = PRODUCTS.filter(p => p.categoryId === cat.id);
+        const displayProducts = products.slice(0, 4);
+
+        return `
+          <div class="category-page-card">
+            <div class="category-page-header">
+              <h2>${cat.name}</h2>
+              <p>${cat.description}</p>
+            </div>
+            <div class="category-page-products">
+              ${displayProducts.map(p => `
+                <div class="category-page-product">
+                  <a href="product.html?id=${p.id}">${p.name}</a>
+                  <span>${CONFIG.CURRENCY_SYMBOL}${p.price.toFixed(2)}</span>
+                </div>
+              `).join("")}
+            </div>
+            <a href="shop.html?category=${cat.id}" class="category-page-link">
+              View All ${cat.name} (${products.length})
+            </a>
+          </div>
+        `;
+      }).join("");
+    });
+  </script>
+</body>
+</html>

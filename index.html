@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="NEXORA - Thoughtful technology for everyday life. Smart, practical electronics designed to make work, travel, and daily life easier.">
+  <title>NEXORA - Premium Electronics Store</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <div class="header-wrapper"></div>
+
+  <main>
+    <section class="hero-section">
+      <div class="container hero-layout">
+        <aside class="hero-sidebar" id="hero-sidebar" aria-label="Categories"></aside>
+        <div class="hero-main">
+          <div class="hero-banner" id="hero-banner">
+            <div class="hero-slide active" data-slide="0">
+              <div class="hero-slide-content">
+                <p class="hero-slide-eyebrow">THE NEW STANDARD</p>
+                <h1 class="hero-slide-title">For Everyday <span class="hero-accent">Power</span></h1>
+                <p class="hero-slide-desc">65W GaN Fast Charging. Compact. Reliable. Built to charge everything you carry.</p>
+                <p class="hero-slide-price">From <strong>$49</strong></p>
+                <a href="shop.html?category=power-charging" class="btn btn-primary">Shop Now</a>
+              </div>
+              <div class="hero-slide-visual">
+                <img src="assets/laptop.png" alt="65W GaN Fast Charger" loading="eager">
+              </div>
+            </div>
+            <div class="hero-slide" data-slide="1">
+              <div class="hero-slide-content">
+                <p class="hero-slide-eyebrow">IMMERSIVE AUDIO</p>
+                <h1 class="hero-slide-title">Wireless <span class="hero-accent">Earbuds Pro</span></h1>
+                <p class="hero-slide-desc">Active Noise Cancellation. 30-Hour Battery. IPX5 Water Resistant.</p>
+                <p class="hero-slide-price">From <strong>$59</strong></p>
+                <a href="shop.html?category=audio" class="btn btn-primary">Shop Now</a>
+              </div>
+              <div class="hero-slide-visual">
+                <img src="assets/air pods.png" alt="Wireless Earbuds Pro" loading="lazy">
+              </div>
+            </div>
+            <div class="hero-slide" data-slide="2">
+              <div class="hero-slide-content">
+                <p class="hero-slide-eyebrow">SMART PRODUCTIVITY</p>
+                <h1 class="hero-slide-title">Mechanical <span class="hero-accent">Keyboard</span></h1>
+                <p class="hero-slide-desc">Hot-Swappable Switches. Tri-Mode Connectivity. RGB Backlight.</p>
+                <p class="hero-slide-price">From <strong>$69</strong></p>
+                <a href="shop.html?category=mobile-productivity" class="btn btn-primary">Shop Now</a>
+              </div>
+              <div class="hero-slide-visual">
+                <img src="assets/keyboard.png" alt="Mechanical Keyboard" loading="lazy">
+              </div>
+            </div>
+          </div>
+          <div class="hero-dots">
+            <button class="hero-dot active" data-slide="0" aria-label="Slide 1"></button>
+            <button class="hero-dot" data-slide="1" aria-label="Slide 2"></button>
+            <button class="hero-dot" data-slide="2" aria-label="Slide 3"></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="promo-cards-section">
+      <div class="container">
+        <div class="promo-cards-grid" id="promo-cards-grid"></div>
+      </div>
+    </section>
+
+    <section class="section featured-section">
+      <div class="container">
+        <div class="featured-layout">
+          <div class="special-offer-panel" id="special-offer-panel"></div>
+          <div class="featured-products-area">
+            <div class="featured-tabs-header">
+              <div class="featured-tabs">
+                <button class="featured-tab active" data-tab="featured">Featured</button>
+                <button class="featured-tab" data-tab="onsale">On Sale</button>
+                <button class="featured-tab" data-tab="toprated">Top Rated</button>
+              </div>
+            </div>
+            <div class="featured-products-grid" id="featured-products-grid"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section showcase-section">
+      <div class="container">
+        <div class="showcase-grid">
+          <div class="showcase-col" id="col-featured">
+            <div class="showcase-col-header">
+              <h3>Featured Products</h3>
+              <a href="shop.html?sort=featured" class="showcase-viewall">View All</a>
+            </div>
+            <div class="showcase-col-items" id="featured-items"></div>
+          </div>
+          <div class="showcase-col" id="col-onsale">
+            <div class="showcase-col-header">
+              <h3>On Sale</h3>
+              <a href="shop.html?sort=discount" class="showcase-viewall">View All</a>
+            </div>
+            <div class="showcase-col-items" id="sale-items"></div>
+          </div>
+          <div class="showcase-col" id="col-toprated">
+            <div class="showcase-col-header">
+              <h3>Top Rated</h3>
+              <a href="shop.html?sort=rating" class="showcase-viewall">View All</a>
+            </div>
+            <div class="showcase-col-items" id="toprated-items"></div>
+          </div>
+          <div class="showcase-ad" id="showcase-ad">
+            <p class="showcase-ad-eyebrow">SMART TECH</p>
+            <h3 class="showcase-ad-title">Premium Gadgets <br>Starting at <strong>$129</strong></h3>
+            <p class="showcase-ad-desc">Power chargers, earbuds, and smart devices for your everyday needs.</p>
+            <a href="shop.html" class="btn btn-primary btn-sm">Shop Now</a>
+            <div class="showcase-ad-visual">
+              <img src="assets/headset.png" alt="Premium Headphones" loading="lazy">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="newsletter-strip">
+      <div class="container newsletter-strip-inner">
+        <div class="newsletter-strip-left">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <div>
+            <h3>Sign up to our newsletter</h3>
+            <p>Get exclusive offers and product updates.</p>
+          </div>
+        </div>
+        <form class="newsletter-strip-form" id="newsletter-form">
+          <input type="email" placeholder="Enter your email" required aria-label="Email address">
+          <button type="submit" class="btn btn-primary">Subscribe</button>
+        </form>
+      </div>
+      <p class="newsletter-success" id="newsletter-success">Thanks for subscribing! Check your inbox for a welcome message.</p>
+    </section>
+  </main>
+
+  <div class="footer-wrapper"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/data/categories.js"></script>
+  <script src="js/data/products.js"></script>
+  <script src="js/services/productService.js"></script>
+  <script src="js/services/cartService.js"></script>
+  <script src="js/services/wishlistService.js"></script>
+  <script src="js/services/authService.js"></script>
+  <script src="js/services/orderService.js"></script>
+  <script src="js/components/toast.js"></script>
+  <script src="js/components/modal.js"></script>
+  <script src="js/components/productCard.js"></script>
+  <script src="js/components/header.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/pages/home.js"></script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="About NEXORA - Our story, mission, and values.">
+  <title>About - NEXORA</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <div class="header-wrapper"></div>
+
+  <main class="page">
+    <div class="page-header">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html">Home</a>
+        <span aria-hidden="true">/</span>
+        <span>About</span>
+      </nav>
+      <h1>About NEXORA</h1>
+    </div>
+    <div class="about-content">
+      <h2>Our Story</h2>
+      <p>NEXORA was born from a simple idea: technology should make your life better, not more complicated. We noticed that the tech market was flooded with products that prioritized specs over real-world usefulness.</p>
+      <p>We set out to create a different kind of technology brand. One that focuses on thoughtfully designed, practical electronics that genuinely improve your everyday life.</p>
+
+      <h2>Our Mission</h2>
+      <p>To curate and deliver technology products that are genuinely useful, beautifully designed, and built to last. We believe great technology should be accessible, reliable, and feel natural to use.</p>
+
+      <div class="about-values">
+        <div class="about-value">
+          <h3>Quality First</h3>
+          <p>Every product we offer is tested and verified for quality, durability, and real-world performance.</p>
+        </div>
+        <div class="about-value">
+          <h3>Thoughtful Design</h3>
+          <p>We believe great design is invisible. Our products just work, naturally fitting into your daily routine.</p>
+        </div>
+        <div class="about-value">
+          <h3>Honest Pricing</h3>
+          <p>No inflated markups. We price our products fairly so you get genuine value for your money.</p>
+        </div>
+      </div>
+
+      <h2>What We Stand For</h2>
+      <p>In a world of planned obsolescence, we choose to champion products that are built to last. In a market of feature overload, we focus on what actually matters. In an era of disposable tech, we curate items worth keeping.</p>
+      <p>Whether you're setting up a productive workspace, packing for a trip, or automating your home, NEXORA has the right tools for the job.</p>
+
+      <h2>Our Promise</h2>
+      <p>We promise to never stop searching for the best technology products for everyday life. Every item in our store represents our commitment to quality, utility, and thoughtful design.</p>
+    </div>
+  </main>
+
+  <div class="footer-wrapper"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/data/categories.js"></script>
+  <script src="js/data/products.js"></script>
+  <script src="js/services/productService.js"></script>
+  <script src="js/services/cartService.js"></script>
+  <script src="js/services/wishlistService.js"></script>
+  <script src="js/services/authService.js"></script>
+  <script src="js/services/orderService.js"></script>
+  <script src="js/components/toast.js"></script>
+  <script src="js/components/modal.js"></script>
+  <script src="js/components/productCard.js"></script>
+  <script src="js/components/header.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      initHeader();
+      APP.init();
+    });
+  </script>
+</body>
+</html>
