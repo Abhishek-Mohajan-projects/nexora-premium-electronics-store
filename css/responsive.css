@@ -10,6 +10,10 @@
     display: none;
   }
 
+  .hero-mega-panel {
+    display: none !important;
+  }
+
   .hero-main {
     border-radius: var(--radius);
   }
@@ -60,6 +64,10 @@
 
   .showcase-ad {
     grid-column: 1 / -1;
+  }
+
+  .blog-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .footer-main {
@@ -140,6 +148,10 @@
 
   .nav-bar {
     display: none;
+  }
+
+  .mega-menu-panel {
+    display: none !important;
   }
 
   .mobile-menu-btn {
@@ -558,6 +570,10 @@
   .newsletter-strip-form {
     max-width: 100%;
     width: 100%;
+  }
+
+  .blog-grid {
+    grid-template-columns: 1fr;
   }
 
   .footer-main {

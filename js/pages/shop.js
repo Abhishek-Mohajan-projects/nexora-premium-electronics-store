@@ -9,6 +9,11 @@ async function initShopPage() {
     currentFilters.category = categoryParam;
   }
 
+  const subcategoryParam = getUrlParam("subcategory");
+  if (subcategoryParam) {
+    currentFilters.subcategory = subcategoryParam;
+  }
+
   const sortParam = getUrlParam("sort");
   if (sortParam) {
     currentFilters.sort = sortParam;

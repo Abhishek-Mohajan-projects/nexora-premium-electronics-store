@@ -8,6 +8,7 @@ async function initHomePage() {
   await initFeaturedTabs();
   await renderThreeColProducts();
   await renderShowcaseProducts();
+  await renderBlogSection();
   initHeroSlider();
   initNewsletter();
   initPromoPopup();
@@ -37,15 +38,126 @@ function renderHeroSidebar() {
   };
 
   sidebar.innerHTML = allCategories.map((cat, i) => {
-    const icon = cat.icon ? iconMap[cat.icon] : iconMap[cat.icon] || iconMap.bolt;
-    return `
-      <a href="${cat.id === 'featured' ? 'shop.html?sort=featured' : cat.id === 'bestsellers' ? 'shop.html?sort=featured' : cat.id === 'new' ? 'shop.html?sort=newest' : 'shop.html?category=' + cat.id}" class="dept-sidebar-item ${i === 0 ? 'active' : ''}" data-cat-id="${cat.id}">
-        <span class="dept-sidebar-icon">${icon}</span>
-        <span class="dept-sidebar-name">${cat.name}</span>
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-      </a>
-    `;
+    const icon = cat.icon ? iconMap[cat.icon] : iconMap.bolt;
+    const hasSubcategories = cat.subcategories && cat.subcategories.length > 0;
+    const baseUrl = cat.id === 'featured' ? 'shop.html?sort=featured' : cat.id === 'bestsellers' ? 'shop.html?sort=featured' : cat.id === 'new' ? 'shop.html?sort=newest' : 'shop.html?category=' + cat.id;
+
+    if (hasSubcategories) {
+      const subLinks = cat.subcategories.map(sub =>
+        `<a href="shop.html?category=${cat.id}&subcategory=${sub.id}" class="mega-sub-link">${sub.name}</a>`
+      ).join("");
+
+      return `
+        <div class="hero-mega-item" data-cat-id="${cat.id}">
+          <a href="${baseUrl}" class="hero-mega-trigger">
+            <span class="dept-sidebar-icon">${icon}</span>
+            <span class="dept-sidebar-name">${cat.name}</span>
+            <svg class="hero-mega-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+          <div class="hero-mega-panel">
+            <div class="hero-mega-panel-inner">
+              <div class="hero-mega-panel-head">
+                <h4>${cat.name}</h4>
+                <p>${cat.description || ''}</p>
+              </div>
+              <div class="hero-mega-panel-links">
+                <a href="${baseUrl}" class="mega-sub-link mega-sub-link--all">View All ${cat.name}</a>
+                ${subLinks}
+              </div>
+              <div class="hero-mega-panel-image">
+                <img src="${cat.image}" alt="${cat.name}" loading="lazy">
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    } else {
+      return `
+        <a href="${baseUrl}" class="hero-mega-item hero-mega-item--simple" data-cat-id="${cat.id}">
+          <span class="dept-sidebar-icon">${icon}</span>
+          <span class="dept-sidebar-name">${cat.name}</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      `;
+    }
   }).join("");
+
+  initHeroSidebarInteraction();
+}
+
+function initHeroSidebarInteraction() {
+  const megaItems = document.querySelectorAll(".hero-mega-item");
+  let openItem = null;
+  let closeTimer = null;
+  let openTimer = null;
+
+  function closeAll() {
+    megaItems.forEach(item => item.classList.remove("is-open"));
+    openItem = null;
+  }
+
+  function scheduleClose(item) {
+    clearTimeout(closeTimer);
+    closeTimer = setTimeout(() => {
+      if (openItem === item) {
+        item.classList.remove("is-open");
+        openItem = null;
+      }
+    }, 180);
+  }
+
+  function cancelClose() {
+    clearTimeout(closeTimer);
+  }
+
+  function scheduleOpen(item) {
+    clearTimeout(openTimer);
+    openTimer = setTimeout(() => {
+      if (openItem && openItem !== item) {
+        openItem.classList.remove("is-open");
+      }
+      item.classList.add("is-open");
+      openItem = item;
+    }, 80);
+  }
+
+  function cancelOpen() {
+    clearTimeout(openTimer);
+  }
+
+  megaItems.forEach(item => {
+    if (item.classList.contains("hero-mega-item--simple")) return;
+
+    item.addEventListener("mouseenter", () => {
+      cancelClose();
+      scheduleOpen(item);
+    });
+
+    item.addEventListener("mouseleave", () => {
+      cancelOpen();
+      scheduleClose(item);
+    });
+
+    const panel = item.querySelector(".hero-mega-panel");
+    if (panel) {
+      panel.addEventListener("mouseenter", () => {
+        cancelClose();
+        cancelOpen();
+      });
+
+      panel.addEventListener("mouseleave", () => {
+        scheduleClose(item);
+      });
+    }
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      clearTimeout(closeTimer);
+      clearTimeout(openTimer);
+      closeAll();
+    }
+  });
 }
 
 function renderPromoCards() {
@@ -267,6 +379,53 @@ function initPromoPopup() {
 
     setTimeout(closePopup, 20000);
   }, 3000);
+}
+
+async function renderBlogSection() {
+  const section = document.getElementById("recent-blog-section");
+  if (!section) return;
+
+  const posts = BlogService.getRecentPosts(3);
+  if (!posts.length) {
+    section.style.display = "none";
+    return;
+  }
+
+  function formatDate(dateStr) {
+    const d = new Date(dateStr);
+    return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  }
+
+  const cards = posts.map(post => `
+    <a href="blog.html?slug=${post.slug}" class="blog-card">
+      <div class="blog-card-image">
+        <img src="${post.image}" alt="${post.title}" loading="lazy">
+        <span class="blog-card-category">${post.category}</span>
+      </div>
+      <div class="blog-card-body">
+        <time class="blog-card-date" datetime="${post.publishedAt}">${formatDate(post.publishedAt)}</time>
+        <h3 class="blog-card-title">${post.title}</h3>
+        <p class="blog-card-excerpt">${post.excerpt}</p>
+        <span class="blog-card-cta">Read Article
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </div>
+    </a>
+  `).join("");
+
+  section.innerHTML = `
+    <div class="container">
+      <div class="section-header">
+        <p class="section-label">From the Journal</p>
+        <h2 class="section-title">Latest from our blog</h2>
+        <p class="section-desc">Helpful guides, ideas, and insights to help you get more from your everyday technology.</p>
+      </div>
+      <div class="blog-grid">${cards}</div>
+      <div class="blog-viewall-wrap">
+        <a href="blog.html" class="btn btn-outline">View All Articles</a>
+      </div>
+    </div>
+  `;
 }
 
 document.addEventListener("DOMContentLoaded", initHomePage);

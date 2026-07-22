@@ -6,6 +6,10 @@ const ProductService = {
       products = products.filter(p => p.categoryId === filters.category);
     }
 
+    if (filters.subcategory) {
+      products = products.filter(p => p.subcategoryId === filters.subcategory);
+    }
+
     if (filters.search) {
       const q = filters.search.toLowerCase();
       products = products.filter(p =>
@@ -92,6 +96,15 @@ const ProductService = {
 
   async getProductsByCategory(categoryId) {
     return PRODUCTS.filter(p => p.categoryId === categoryId);
+  },
+
+  async getProductsBySubcategory(categoryId, subcategoryId) {
+    return PRODUCTS.filter(p => p.categoryId === categoryId && p.subcategoryId === subcategoryId);
+  },
+
+  async getSubcategories(categoryId) {
+    const category = CATEGORIES.find(c => c.id === categoryId);
+    return category ? category.subcategories || [] : [];
   },
 
   async getFeaturedProducts(limit = 8) {

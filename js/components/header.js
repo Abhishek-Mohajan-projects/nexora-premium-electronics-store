@@ -19,13 +19,100 @@ async function updateWishlistBadge() {
   });
 }
 
+function getMegaMenuPanels() {
+  const shopCategories = CATEGORIES;
+  const featuredProducts = PRODUCTS.filter(p => p.tags.includes("featured")).slice(0, 3);
+
+  const categoryColumns = shopCategories.map(cat => {
+    const subs = (cat.subcategories || []).map(sub =>
+      `<a href="shop.html?category=${cat.id}&subcategory=${sub.id}" class="mega-menu-link">${sub.name}</a>`
+    ).join("");
+    return `
+      <div class="mega-menu-col">
+        <a href="shop.html?category=${cat.id}" class="mega-menu-col-heading">${cat.name}</a>
+        <div class="mega-menu-col-links">
+          <a href="shop.html?category=${cat.id}" class="mega-menu-link mega-menu-link--viewall">View All</a>
+          ${subs}
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  const promoHTML = `
+    <div class="mega-menu-promo">
+      <p class="mega-menu-promo-badge">Featured</p>
+      <p class="mega-menu-promo-title">Top Picks For You</p>
+      <div class="mega-menu-promo-products">
+        ${featuredProducts.map(p => `
+          <a href="product.html?id=${p.id}" class="mega-menu-promo-item">
+            <img src="${p.thumbnail}" alt="${p.name}" loading="lazy">
+            <div class="mega-menu-promo-info">
+              <span class="mega-menu-promo-name">${p.name}</span>
+              <span class="mega-menu-promo-price">${CONFIG.CURRENCY_SYMBOL}${p.price.toFixed(2)}</span>
+            </div>
+          </a>
+        `).join("")}
+      </div>
+      <a href="shop.html" class="mega-menu-promo-cta">Shop All Products</a>
+    </div>
+  `;
+
+  const shopPanel = `
+    <div class="mega-menu-panel" data-mega-panel="shop" aria-hidden="true">
+      <div class="mega-menu-inner">
+        <div class="mega-menu-nav">
+          <a href="shop.html" class="mega-menu-nav-item mega-menu-nav-item--all">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            All Products
+          </a>
+          ${shopCategories.map(cat => `
+            <a href="shop.html?category=${cat.id}" class="mega-menu-nav-item">
+              <img src="${cat.image}" alt="" class="mega-menu-nav-icon" loading="lazy">
+              ${cat.name}
+            </a>
+          `).join("")}
+        </div>
+        <div class="mega-menu-columns">
+          ${categoryColumns}
+        </div>
+        ${promoHTML}
+      </div>
+    </div>
+  `;
+
+  const categoriesPanel = `
+    <div class="mega-menu-panel" data-mega-panel="categories" aria-hidden="true">
+      <div class="mega-menu-inner">
+        <div class="mega-menu-nav">
+          <a href="categories.html" class="mega-menu-nav-item mega-menu-nav-item--all">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            All Categories
+          </a>
+          ${shopCategories.map(cat => `
+            <a href="shop.html?category=${cat.id}" class="mega-menu-nav-item">
+              <img src="${cat.image}" alt="" class="mega-menu-nav-icon" loading="lazy">
+              ${cat.name}
+            </a>
+          `).join("")}
+        </div>
+        <div class="mega-menu-columns">
+          ${categoryColumns}
+        </div>
+        ${promoHTML}
+      </div>
+    </div>
+  `;
+
+  return shopPanel + categoriesPanel;
+}
+
 function renderHeader() {
   const currentPage = window.location.pathname.split("/").pop() || "index.html";
 
   const navLinks = [
     { href: "index.html", label: "Home" },
-    { href: "shop.html", label: "Shop" },
-    { href: "categories.html", label: "Categories" },
+    { href: "shop.html", label: "Shop", mega: "shop" },
+    { href: "categories.html", label: "Categories", mega: "categories" },
     { href: "shop.html?sort=newest", label: "New Arrivals" },
     { href: "shop.html?sort=featured", label: "Deals" },
     { href: "about.html", label: "About" }
@@ -33,18 +120,43 @@ function renderHeader() {
 
   const navHTML = navLinks.map(link => {
     const isActive = currentPage === link.href || (currentPage === "" && link.href === "index.html");
+    if (link.mega) {
+      return `<a href="${link.href}" class="nav-link ${isActive ? 'active' : ''}" data-mega-trigger="${link.mega}">${link.label}</a>`;
+    }
     return `<a href="${link.href}" class="nav-link ${isActive ? 'active' : ''}">${link.label}</a>`;
   }).join("");
 
-  const deptCategories = CATEGORIES.map(cat =>
-    `<a href="shop.html?category=${cat.id}" class="dept-menu-item">
-      <div class="dept-menu-icon">
-        <img src="${cat.image}" alt="${cat.name}" loading="lazy">
-      </div>
-      <span>${cat.name}</span>
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-    </a>`
-  ).join("");
+  const deptCategories = CATEGORIES.map(cat => {
+    const hasSubcategories = cat.subcategories && cat.subcategories.length > 0;
+    if (hasSubcategories) {
+      return `
+        <div class="dept-menu-item dept-menu-item--has-sub" data-category="${cat.id}">
+          <a href="shop.html?category=${cat.id}" class="dept-menu-item-link">
+            <div class="dept-menu-icon">
+              <img src="${cat.image}" alt="${cat.name}" loading="lazy">
+            </div>
+            <span>${cat.name}</span>
+            <svg class="dept-menu-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+          <div class="dept-sub-menu">
+            <a href="shop.html?category=${cat.id}" class="dept-sub-menu-item dept-sub-menu-item--all">View All ${cat.name}</a>
+            ${cat.subcategories.map(sub => `
+              <a href="shop.html?category=${cat.id}&subcategory=${sub.id}" class="dept-sub-menu-item">${sub.name}</a>
+            `).join("")}
+          </div>
+        </div>
+      `;
+    }
+    return `
+      <a href="shop.html?category=${cat.id}" class="dept-menu-item">
+        <div class="dept-menu-icon">
+          <img src="${cat.image}" alt="${cat.name}" loading="lazy">
+        </div>
+        <span>${cat.name}</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      </a>
+    `;
+  }).join("");
 
   return `
     <div class="utility-bar">
@@ -145,8 +257,9 @@ function renderHeader() {
                   </button>
                   <div class="mobile-drawer-sub" data-accordion-content>
                     <a href="shop.html?category=${cat.id}" class="mobile-drawer-sub-link">View All ${cat.name}</a>
-                    <a href="shop.html?category=${cat.id}&sort=newest" class="mobile-drawer-sub-link">New in ${cat.name}</a>
-                    <a href="shop.html?category=${cat.id}&sort=featured" class="mobile-drawer-sub-link">Popular in ${cat.name}</a>
+                    ${cat.subcategories ? cat.subcategories.map(sub => `
+                      <a href="shop.html?category=${cat.id}&subcategory=${sub.id}" class="mobile-drawer-sub-link">${sub.name}</a>
+                    `).join("") : ''}
                   </div>
                 </div>
               `).join("")}
@@ -169,7 +282,7 @@ function renderHeader() {
       </div>
     </header>
 
-    <div class="nav-bar">
+    <nav class="nav-bar" aria-label="Main navigation">
       <div class="container nav-bar-inner">
         <div class="dept-dropdown-wrap">
           <button class="dept-trigger" aria-label="All Departments" aria-expanded="false">
@@ -193,7 +306,9 @@ function renderHeader() {
           Free Shipping on Orders Over ${CONFIG.CURRENCY_SYMBOL}${CONFIG.FREE_SHIPPING_THRESHOLD}
         </div>
       </div>
-    </div>
+    </nav>
+
+    ${getMegaMenuPanels()}
   `;
 }
 
@@ -293,6 +408,7 @@ function initHeader() {
   initMobileMenu();
   initWishlistBadges();
   initDeptDropdown();
+  initMegaMenu();
   updateCartBadge();
   updateWishlistBadge();
 }
@@ -454,6 +570,96 @@ function initDeptDropdown() {
       menu.setAttribute("aria-hidden", "true");
     }
   });
+}
+
+function initMegaMenu() {
+  const triggers = document.querySelectorAll("[data-mega-trigger]");
+  const panels = document.querySelectorAll(".mega-menu-panel");
+  const navBar = document.querySelector(".nav-bar");
+
+  if (!triggers.length || !panels.length) return;
+
+  let openPanel = null;
+  let closeTimer = null;
+
+  function getOffsetTop() {
+    if (!navBar) return 0;
+    return navBar.getBoundingClientRect().top + window.scrollY + navBar.offsetHeight;
+  }
+
+  function openMega(panel) {
+    clearTimeout(closeTimer);
+    if (openPanel && openPanel !== panel) {
+      openPanel.classList.remove("is-open");
+      openPanel.setAttribute("aria-hidden", "true");
+    }
+    const topPos = getOffsetTop();
+    panel.style.top = topPos + "px";
+    panel.classList.add("is-open");
+    panel.setAttribute("aria-hidden", "false");
+    openPanel = panel;
+  }
+
+  function scheduleClose() {
+    closeTimer = setTimeout(() => {
+      if (openPanel) {
+        openPanel.classList.remove("is-open");
+        openPanel.setAttribute("aria-hidden", "true");
+        openPanel = null;
+      }
+    }, 200);
+  }
+
+  function cancelClose() {
+    clearTimeout(closeTimer);
+  }
+
+  triggers.forEach(trigger => {
+    const key = trigger.getAttribute("data-mega-trigger");
+    const panel = document.querySelector(`[data-mega-panel="${key}"]`);
+    if (!panel) return;
+
+    trigger.addEventListener("mouseenter", () => {
+      openMega(panel);
+    });
+
+    panel.addEventListener("mouseenter", () => {
+      cancelClose();
+    });
+
+    panel.addEventListener("mouseleave", () => {
+      scheduleClose();
+    });
+  });
+
+  triggers.forEach(trigger => {
+    trigger.addEventListener("mouseleave", () => {
+      scheduleClose();
+    });
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && openPanel) {
+      openPanel.classList.remove("is-open");
+      openPanel.setAttribute("aria-hidden", "true");
+      openPanel = null;
+    }
+  });
+
+  document.addEventListener("click", (e) => {
+    if (openPanel && !e.target.closest(".mega-menu-panel") && !e.target.closest("[data-mega-trigger]")) {
+      openPanel.classList.remove("is-open");
+      openPanel.setAttribute("aria-hidden", "true");
+      openPanel = null;
+    }
+  });
+
+  window.addEventListener("scroll", () => {
+    if (openPanel) {
+      const topPos = getOffsetTop();
+      openPanel.style.top = topPos + "px";
+    }
+  }, { passive: true });
 }
 
 async function initWishlistBadges() {
