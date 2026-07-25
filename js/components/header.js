@@ -447,15 +447,22 @@ function initSearch() {
 
       if (query.length < 2) {
         dropdown.innerHTML = "";
-        dropdown.classList.remove("active");
+        dropdown.classList.remove("active", "is-loading");
         dropdown.setAttribute("aria-hidden", "true");
         return;
       }
+
+      dropdown.classList.add("is-loading");
+      dropdown.innerHTML = "";
+      dropdown.classList.add("active");
+      dropdown.setAttribute("aria-hidden", "false");
 
       let results = await ProductService.searchProducts(query);
       if (category) {
         results = results.filter(function(p) { return p.categoryId === category; });
       }
+
+      dropdown.classList.remove("is-loading");
 
       const catName = getCategoryName || function() { return ""; };
 
@@ -486,7 +493,7 @@ function initSearch() {
   }
 
   function closeDropdown() {
-    dropdown.classList.remove("active");
+    dropdown.classList.remove("active", "is-loading");
     dropdown.setAttribute("aria-hidden", "true");
   }
 

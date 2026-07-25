@@ -292,10 +292,36 @@ input, textarea, select {
   overflow-y: auto;
   display: none;
   z-index: 1001;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 .search-results-dropdown.active {
   display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.search-results-dropdown.is-loading {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.search-results-dropdown.is-loading::after {
+  content: "";
+  display: block;
+  height: 3px;
+  background: var(--primary);
+  border-radius: 2px;
+  animation: search-loading 0.8s ease-in-out infinite;
+  margin: 12px 16px;
+}
+
+@keyframes search-loading {
+  0% { width: 0; margin-left: 16px; }
+  50% { width: 60%; margin-left: 16px; }
+  100% { width: 0; margin-left: calc(100% - 16px); }
 }
 
 .search-dd-item {
@@ -303,11 +329,26 @@ input, textarea, select {
   align-items: center;
   gap: 12px;
   padding: 10px 16px;
-  transition: background var(--transition);
+  transition: background var(--transition), opacity 0.15s ease, transform 0.15s ease;
+  opacity: 0;
+  transform: translateX(-8px);
+  animation: search-dd-slide-in 0.2s ease forwards;
 }
 
-.search-dd-item:hover {
-  background: var(--bg-alt);
+.search-dd-item:nth-child(1) { animation-delay: 0.03s; }
+.search-dd-item:nth-child(2) { animation-delay: 0.06s; }
+.search-dd-item:nth-child(3) { animation-delay: 0.09s; }
+.search-dd-item:nth-child(4) { animation-delay: 0.12s; }
+.search-dd-item:nth-child(5) { animation-delay: 0.15s; }
+.search-dd-item:nth-child(6) { animation-delay: 0.18s; }
+.search-dd-item:nth-child(7) { animation-delay: 0.21s; }
+.search-dd-item:nth-child(8) { animation-delay: 0.24s; }
+
+@keyframes search-dd-slide-in {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .search-dd-img {
@@ -353,10 +394,14 @@ input, textarea, select {
   font-weight: 500;
   color: var(--primary);
   border-top: 1px solid var(--border-light);
+  opacity: 0;
+  animation: search-dd-slide-in 0.25s ease forwards;
+  animation-delay: 0.28s;
 }
 
 .search-dd-viewall:hover {
   background: var(--bg-alt);
+  color: var(--primary);
 }
 
 .search-dd-empty {
@@ -364,6 +409,12 @@ input, textarea, select {
   text-align: center;
   color: var(--text-muted);
   font-size: 0.85rem;
+  animation: search-empty-fade 0.25s ease;
+}
+
+@keyframes search-empty-fade {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* ==============================
