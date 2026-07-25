@@ -2496,7 +2496,7 @@ input, textarea, select {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0;
-  min-width: 600px;
+  min-width: 320px;
 }
 
 .quickview-image {
@@ -2577,6 +2577,12 @@ input, textarea, select {
 
 .breadcrumb a:hover {
   color: var(--primary);
+}
+
+.page-subtitle {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-top: 4px;
 }
 
 /* ==============================

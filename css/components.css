@@ -993,6 +993,7 @@
 .about-hero {
   background: var(--bg-alt);
   padding: 48px 0;
+  overflow: hidden;
 }
 
 .about-hero-grid {
@@ -1000,6 +1001,7 @@
   grid-template-columns: 1.2fr 1fr;
   gap: 48px;
   align-items: center;
+  overflow: hidden;
 }
 
 .about-hero-eyebrow {
@@ -1254,8 +1256,8 @@
   color: var(--text-muted);
 }
 
-.about-values {
-  display: block;
+.about-values-grid {
+  grid-template-columns: 1fr;
 }
 
 /* Contact Page */
@@ -1548,4 +1550,302 @@
 .wishlist-remove-btn:hover {
   background: var(--error) !important;
   color: #fff !important;
+}
+
+/* ==============================
+   MY ACCOUNT PAGE
+   ============================== */
+.account-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 28px;
+  padding: 28px 0 56px;
+}
+
+.account-sidebar {
+  position: sticky;
+  top: 160px;
+  align-self: start;
+}
+
+.account-user-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 24px;
+  background: var(--bg-alt);
+  border-radius: var(--radius);
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.account-user-avatar {
+  width: 56px;
+  height: 56px;
+  background: var(--primary);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.account-user-avatar.guest {
+  background: var(--text-light);
+  font-size: 1.4rem;
+}
+
+.account-user-info h3 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 2px;
+}
+
+.account-user-info p {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.account-nav {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.account-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-align: left;
+  transition: all var(--transition);
+  border: none;
+  background: none;
+  border-left: 3px solid transparent;
+}
+
+.account-nav-btn:hover {
+  background: var(--bg-alt);
+  color: var(--primary);
+}
+
+.account-nav-btn.active {
+  background: var(--bg-alt);
+  color: var(--primary);
+  font-weight: 600;
+  border-left-color: var(--primary);
+}
+
+.account-nav-btn svg {
+  flex-shrink: 0;
+  color: inherit;
+}
+
+.account-main {
+  min-height: 300px;
+}
+
+.account-section {
+  background: #fff;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+
+.account-section h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 16px;
+}
+
+.account-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.form-row .form-group {
+  margin-bottom: 0;
+}
+
+.account-empty {
+  text-align: center;
+  padding: 48px 20px;
+  color: var(--text-muted);
+}
+
+.account-empty svg {
+  color: var(--text-light);
+  margin-bottom: 16px;
+}
+
+.account-empty h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 6px;
+}
+
+.account-empty p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+/* Orders */
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.order-card {
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.order-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  background: var(--bg-alt);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.order-id {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--primary);
+  font-family: monospace;
+}
+
+.order-status {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  text-transform: capitalize;
+}
+
+.order-status--completed,
+.order-status--delivered {
+  background: rgba(45,156,60,0.1);
+  color: var(--success);
+}
+
+.order-status--processing,
+.order-status--pending {
+  background: rgba(230,168,23,0.1);
+  color: var(--warning);
+}
+
+.order-status--cancelled {
+  background: rgba(217,64,64,0.1);
+  color: var(--error);
+}
+
+.order-items {
+  padding: 0 16px;
+}
+
+.order-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 0.82rem;
+}
+
+.order-item:last-child {
+  border-bottom: none;
+}
+
+.order-item span:first-child {
+  flex: 1;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.order-item span:nth-child(2) {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+
+.order-item span:last-child {
+  font-weight: 600;
+  color: var(--primary);
+  white-space: nowrap;
+}
+
+.order-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: var(--bg-alt);
+  border-top: 1px solid var(--border-light);
+}
+
+.order-date {
+  font-size: 0.75rem;
+  color: var(--text-light);
+}
+
+.order-total {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+/* Danger Zone */
+.account-danger-zone {
+  border: 1px solid rgba(217,64,64,0.3);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+
+.account-danger-zone h3 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--error);
+  margin-bottom: 6px;
+}
+
+.account-danger-zone p {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+}
+
+.btn-danger {
+  background: var(--error);
+  color: #fff;
+  border-color: var(--error);
+}
+
+.btn-danger:hover {
+  background: #c03030;
+  border-color: #c03030;
 }

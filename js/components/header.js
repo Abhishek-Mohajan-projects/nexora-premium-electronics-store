@@ -163,17 +163,17 @@ function renderHeader() {
       <div class="container utility-bar-inner">
         <p class="utility-welcome">Welcome to <strong>${CONFIG.STORE_NAME}</strong></p>
         <div class="utility-links">
-          <a href="#" class="utility-link">
+          <a href="contact.html" class="utility-link">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
             Store Locator
           </a>
-          <a href="#" class="utility-link">
+          <a href="support.html#order-tracking" class="utility-link">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
             Track Your Order
           </a>
           <span class="utility-sep">|</span>
-          <a href="#" class="utility-link">Register</a>
-          <a href="#" class="utility-link">Sign In</a>
+          <a href="support.html#my-account" class="utility-link">Register</a>
+          <a href="support.html#my-account" class="utility-link">Sign In</a>
         </div>
       </div>
     </div>
@@ -228,58 +228,58 @@ function renderHeader() {
           </a>
         </div>
       </div>
+    </header>
 
-      <div class="mobile-menu" aria-hidden="true">
-        <div class="mobile-menu-overlay" data-close-menu></div>
-        <div class="mobile-drawer">
-          <div class="mobile-drawer-header">
-            <a href="index.html" class="logo">
-              <span class="logo-text">${CONFIG.STORE_NAME}</span>
-            </a>
-            <button class="mobile-drawer-close" data-close-menu aria-label="Close menu">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-            </button>
-          </div>
-          <div class="mobile-drawer-body">
-            <nav class="mobile-drawer-nav">
-              <a href="deals.html" class="mobile-drawer-link mobile-drawer-link--highlight">Value of the Day</a>
-              <a href="deals.html" class="mobile-drawer-link mobile-drawer-link--highlight">Top 100 Offers</a>
-              <a href="new-arrivals.html" class="mobile-drawer-link mobile-drawer-link--highlight">New Arrivals</a>
-            </nav>
-            <div class="mobile-drawer-sep"></div>
-            <div class="mobile-drawer-cats">
-              ${CATEGORIES.map((cat, i) => `
-                <div class="mobile-drawer-cat" data-accordion>
-                  <button class="mobile-drawer-cat-btn" data-accordion-trigger>
-                    <span>${cat.name}</span>
-                    <svg class="mobile-drawer-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-                  </button>
-                  <div class="mobile-drawer-sub" data-accordion-content>
-                    <a href="shop.html?category=${cat.id}" class="mobile-drawer-sub-link">View All ${cat.name}</a>
-                    ${cat.subcategories ? cat.subcategories.map(sub => `
-                      <a href="shop.html?category=${cat.id}&subcategory=${sub.id}" class="mobile-drawer-sub-link">${sub.name}</a>
-                    `).join("") : ''}
-                  </div>
-                </div>
-              `).join("")}
+  <div class="mobile-menu" aria-hidden="true">
+    <div class="mobile-menu-overlay" data-close-menu></div>
+    <div class="mobile-drawer">
+      <div class="mobile-drawer-header">
+        <a href="index.html" class="logo">
+          <span class="logo-text">${CONFIG.STORE_NAME}</span>
+        </a>
+        <button class="mobile-drawer-close" data-close-menu aria-label="Close menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="mobile-drawer-body">
+        <nav class="mobile-drawer-nav">
+          <a href="deals.html" class="mobile-drawer-link mobile-drawer-link--highlight">Value of the Day</a>
+          <a href="deals.html" class="mobile-drawer-link mobile-drawer-link--highlight">Top 100 Offers</a>
+          <a href="new-arrivals.html" class="mobile-drawer-link mobile-drawer-link--highlight">New Arrivals</a>
+        </nav>
+        <div class="mobile-drawer-sep"></div>
+        <div class="mobile-drawer-cats">
+          ${CATEGORIES.map((cat, i) => `
+            <div class="mobile-drawer-cat" data-accordion>
+              <button class="mobile-drawer-cat-btn" data-accordion-trigger>
+                <span>${cat.name}</span>
+                <svg class="mobile-drawer-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+              </button>
+              <div class="mobile-drawer-sub" data-accordion-content>
+                <a href="shop.html?category=${cat.id}" class="mobile-drawer-sub-link">View All ${cat.name}</a>
+                ${cat.subcategories ? cat.subcategories.map(sub => `
+                  <a href="shop.html?category=${cat.id}&subcategory=${sub.id}" class="mobile-drawer-sub-link">${sub.name}</a>
+                `).join("") : ''}
+              </div>
             </div>
-          </div>
-          <div class="mobile-drawer-footer">
-            <svg class="mobile-drawer-wave" viewBox="0 0 320 30" preserveAspectRatio="none"><path d="M0,30 C80,0 240,0 320,30 Z" fill="#F5C518"/></svg>
-            <div class="mobile-drawer-dots">
-              <span class="mobile-drawer-dot mobile-drawer-dot--red"></span>
-              <span class="mobile-drawer-dot mobile-drawer-dot--green"></span>
-              <span class="mobile-drawer-dot mobile-drawer-dot--yellow"></span>
-            </div>
-            <div class="mobile-drawer-footer-links">
-              <a href="#" class="mobile-drawer-footer-link">Privacy</a>
-              <a href="#" class="mobile-drawer-footer-link">Terms</a>
-              <a href="#" class="mobile-drawer-footer-link">Info</a>
-            </div>
-          </div>
+          `).join("")}
         </div>
       </div>
-    </header>
+      <div class="mobile-drawer-footer">
+        <svg class="mobile-drawer-wave" viewBox="0 0 320 30" preserveAspectRatio="none"><path d="M0,30 C80,0 240,0 320,30 Z" fill="#F5C518"/></svg>
+        <div class="mobile-drawer-dots">
+          <span class="mobile-drawer-dot mobile-drawer-dot--red"></span>
+          <span class="mobile-drawer-dot mobile-drawer-dot--green"></span>
+          <span class="mobile-drawer-dot mobile-drawer-dot--yellow"></span>
+        </div>
+        <div class="mobile-drawer-footer-links">
+          <a href="#" class="mobile-drawer-footer-link">Privacy</a>
+          <a href="#" class="mobile-drawer-footer-link">Terms</a>
+          <a href="#" class="mobile-drawer-footer-link">Info</a>
+        </div>
+      </div>
+    </div>
+  </div>
 
     <nav class="nav-bar" aria-label="Main navigation">
       <div class="container nav-bar-inner">
@@ -367,12 +367,12 @@ function renderFooter() {
         <div class="footer-col">
           <h4 class="footer-heading">Customer Care</h4>
           <ul class="footer-links">
-            <li><a href="#">My Account</a></li>
-            <li><a href="#">Order Tracking</a></li>
+            <li><a href="support.html#my-account">My Account</a></li>
+            <li><a href="support.html#order-tracking">Order Tracking</a></li>
             <li><a href="wishlist.html">Wishlist</a></li>
-            <li><a href="#">Returns & Exchanges</a></li>
-            <li><a href="#">FAQ</a></li>
-            <li><a href="#">Product Support</a></li>
+            <li><a href="support.html#returns">Returns & Exchanges</a></li>
+            <li><a href="support.html#faq">FAQ</a></li>
+            <li><a href="support.html#product-support">Product Support</a></li>
           </ul>
         </div>
       </div>

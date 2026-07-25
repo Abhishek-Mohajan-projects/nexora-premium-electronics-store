@@ -33,11 +33,11 @@
           </div>
           <div class="about-hero-stats">
             <div class="about-stat">
-              <span class="about-stat-number" data-count="${PRODUCTS.length}">${PRODUCTS.length}</span>
+              <span class="about-stat-number" data-count="">0</span>
               <span class="about-stat-label">Products</span>
             </div>
             <div class="about-stat">
-              <span class="about-stat-number" data-count="${CATEGORIES.length}">${CATEGORIES.length}</span>
+              <span class="about-stat-number" data-count="">0</span>
               <span class="about-stat-label">Categories</span>
             </div>
             <div class="about-stat">
@@ -202,6 +202,12 @@
     document.addEventListener("DOMContentLoaded", async () => {
       initHeader();
       APP.init();
+
+      const statNumbers = document.querySelectorAll(".about-stat-number[data-count]");
+      statNumbers[0].dataset.count = PRODUCTS.length;
+      statNumbers[0].textContent = PRODUCTS.length;
+      statNumbers[1].dataset.count = CATEGORIES.length;
+      statNumbers[1].textContent = CATEGORIES.length;
 
       const showcase = document.getElementById("about-category-showcase");
       if (showcase) {
