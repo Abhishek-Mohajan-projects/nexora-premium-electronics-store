@@ -29,27 +29,46 @@ async function renderCart() {
 
   container.innerHTML = `
     <div class="cart-items">
-      ${items.map(item => `
-        <div class="cart-item" data-product-id="${item.productId}">
-          <div class="cart-item-image">
-            <img src="${item.product.images?.[0] || item.product.thumbnail || ''}" alt="${escapeHtml(item.product.name)}" loading="lazy">
-          </div>
-          <div class="cart-item-info">
-            <span class="product-card-category">${getCategoryName(item.product.categoryId)}</span>
-            <h3><a href="product.html?id=${item.productId}">${item.product.name}</a></h3>
-            <span class="cart-item-price">${CONFIG.CURRENCY_SYMBOL}${item.product.price.toFixed(2)}</span>
-          </div>
-          <div class="cart-item-actions">
-            <div class="quantity-control">
-              <button class="qty-btn qty-minus" data-product-id="${item.productId}" aria-label="Decrease quantity">−</button>
-              <span class="qty-value">${item.quantity}</span>
-              <button class="qty-btn qty-plus" data-product-id="${item.productId}" aria-label="Increase quantity">+</button>
+      <div class="cart-items-header">
+        <h2>Cart (${items.length} item${items.length !== 1 ? 's' : ''})</h2>
+        <button class="cart-clear-btn" id="clear-cart-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          Clear Cart
+        </button>
+      </div>
+      ${items.map(item => {
+        const product = item.product;
+        const discount = product.compareAtPrice ? Math.round(((product.compareAtPrice - product.price) / product.compareAtPrice) * 100) : 0;
+        return `
+          <div class="cart-item" data-product-id="${item.productId}">
+            <div class="cart-item-image">
+              <a href="product.html?id=${item.productId}">
+                <img src="${product.images?.[0] || product.thumbnail || ''}" alt="${escapeHtml(product.name)}" loading="lazy">
+              </a>
             </div>
-            <span class="cart-item-price" style="min-width:70px;text-align:right;">${CONFIG.CURRENCY_SYMBOL}${item.total.toFixed(2)}</span>
-            <button class="cart-item-remove" data-product-id="${item.productId}" aria-label="Remove ${item.product.name}">Remove</button>
+            <div class="cart-item-info">
+              <span class="product-card-category">${getCategoryName(product.categoryId)}</span>
+              <h3><a href="product.html?id=${item.productId}">${product.name}</a></h3>
+              <div class="cart-item-unit-price">
+                ${discount > 0 ? `<span class="cart-item-discount-badge">-${discount}%</span>` : ""}
+                <span class="cart-item-price">${CONFIG.CURRENCY_SYMBOL}${product.price.toFixed(2)}</span>
+                ${product.compareAtPrice ? `<span class="cart-item-compare">${CONFIG.CURRENCY_SYMBOL}${product.compareAtPrice.toFixed(2)}</span>` : ""}
+              </div>
+            </div>
+            <div class="cart-item-actions">
+              <div class="quantity-control">
+                <button class="qty-btn qty-minus" data-product-id="${item.productId}" aria-label="Decrease quantity">−</button>
+                <span class="qty-value">${item.quantity}</span>
+                <button class="qty-btn qty-plus" data-product-id="${item.productId}" aria-label="Increase quantity">+</button>
+              </div>
+              <span class="cart-item-total">${CONFIG.CURRENCY_SYMBOL}${item.total.toFixed(2)}</span>
+              <button class="cart-item-delete" data-product-id="${item.productId}" aria-label="Remove ${product.name} from cart">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+              </button>
+            </div>
           </div>
-        </div>
-      `).join("")}
+        `;
+      }).join("")}
     </div>
 
     <div class="cart-summary">
@@ -100,13 +119,20 @@ async function renderCart() {
     });
   });
 
-  container.querySelectorAll(".cart-item-remove").forEach(btn => {
+  container.querySelectorAll(".cart-item-delete").forEach(btn => {
     btn.addEventListener("click", async () => {
       await CartService.removeItem(btn.dataset.productId);
       showToast("Item removed from cart");
       await renderCart();
       updateCartBadge();
     });
+  });
+
+  document.getElementById("clear-cart-btn")?.addEventListener("click", async () => {
+    await CartService.clearCart();
+    showToast("Cart cleared");
+    await renderCart();
+    updateCartBadge();
   });
 
   document.getElementById("checkout-btn")?.addEventListener("click", async () => {

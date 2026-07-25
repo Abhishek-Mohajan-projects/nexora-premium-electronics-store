@@ -1439,3 +1439,113 @@
     flex-wrap: wrap;
   }
 }
+
+/* Cart & Wishlist Clear / Remove Buttons */
+.cart-items-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.cart-items-header h2 {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.cart-clear-btn,
+.wishlist-clear-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-light);
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.cart-clear-btn:hover,
+.wishlist-clear-btn:hover {
+  color: var(--error);
+  border-color: var(--error);
+  background: rgba(234, 67, 53, 0.06);
+}
+
+.cart-clear-btn svg,
+.wishlist-clear-btn svg {
+  flex-shrink: 0;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.cart-item-delete {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-light);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.cart-item-delete:hover {
+  color: var(--error);
+  background: rgba(234, 67, 53, 0.08);
+}
+
+.cart-item-unit-price {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cart-item-discount-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--error);
+  background: rgba(234, 67, 53, 0.1);
+  padding: 2px 6px;
+  border-radius: var(--radius-xs);
+}
+
+.cart-item-compare {
+  font-size: 0.8rem;
+  color: var(--text-light);
+  text-decoration: line-through;
+}
+
+.cart-item-total {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--text);
+  min-width: 70px;
+  text-align: right;
+}
+
+.wishlist-remove-btn {
+  background: rgba(255,255,255,0.9) !important;
+  color: var(--error) !important;
+}
+
+.wishlist-remove-btn:hover {
+  background: var(--error) !important;
+  color: #fff !important;
+}
