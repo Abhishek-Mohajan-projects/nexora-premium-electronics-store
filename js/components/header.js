@@ -200,6 +200,7 @@ function renderHeader() {
               <line x1="21" y1="21" x2="16.65" y2="16.65"/>
             </svg>
           </button>
+          <div class="search-results-dropdown" id="search-results-dropdown" aria-hidden="true"></div>
         </div>
         <div class="header-actions">
           <a href="shop.html" class="header-action-link mobile-search-link" aria-label="Search">
@@ -227,8 +228,6 @@ function renderHeader() {
           </a>
         </div>
       </div>
-
-      <div class="search-results-dropdown" id="search-results-dropdown" aria-hidden="true"></div>
 
       <div class="mobile-menu" aria-hidden="true">
         <div class="mobile-menu-overlay" data-close-menu></div>
@@ -424,50 +423,66 @@ function initSearch() {
   let debounceTimer;
 
   function buildShopURL(query, category) {
-    const params = new URLSearchParams();
-    if (query) params.set("q", query);
-    if (category) params.set("category", category);
-    return "shop.html?" + params.toString();
+    try {
+      const params = new URLSearchParams();
+      if (query) params.set("q", query);
+      if (category) params.set("category", category);
+      return "shop.html?" + params.toString();
+    } catch(e) {
+      return "shop.html";
+    }
   }
 
   function navigateToShop() {
     const query = searchInput.value.trim();
     const category = searchCategorySelect ? searchCategorySelect.value : "";
-    window.location.href = buildShopURL(query, category);
+    const url = buildShopURL(query, category);
+    window.location.href = url;
   }
 
   async function showDropdown() {
-    const query = searchInput.value.trim();
-    const category = searchCategorySelect ? searchCategorySelect.value : "";
+    try {
+      const query = searchInput.value.trim();
+      const category = searchCategorySelect ? searchCategorySelect.value : "";
 
-    if (query.length < 2) {
-      dropdown.innerHTML = "";
-      dropdown.classList.remove("active");
-      dropdown.setAttribute("aria-hidden", "true");
-      return;
-    }
+      if (query.length < 2) {
+        dropdown.innerHTML = "";
+        dropdown.classList.remove("active");
+        dropdown.setAttribute("aria-hidden", "true");
+        return;
+      }
 
-    let results = await ProductService.searchProducts(query);
-    if (category) {
-      results = results.filter(p => p.categoryId === category);
-    }
+      let results = await ProductService.searchProducts(query);
+      if (category) {
+        results = results.filter(function(p) { return p.categoryId === category; });
+      }
 
-    if (results.length === 0) {
-      dropdown.innerHTML = `<div class="search-dd-empty">No products found for "${escapeHtml(query)}"</div>`;
-    } else {
-      dropdown.innerHTML = results.map(p => `
-        <a href="product.html?id=${p.id}" class="search-dd-item">
-          <img class="search-dd-img" src="${p.thumbnail || p.images?.[0] || ''}" alt="${escapeHtml(p.name)}" loading="lazy">
-          <div class="search-dd-info">
-            <span class="search-dd-name">${escapeHtml(p.name)}</span>
-            <span class="search-dd-cat">${escapeHtml(getCategoryName(p.categoryId))}</span>
-          </div>
-          <span class="search-dd-price">${CONFIG.CURRENCY_SYMBOL}${p.price.toFixed(2)}</span>
-        </a>
-      `).join("") + `<a href="${buildShopURL(query, category)}" class="search-dd-viewall">View All Results</a>`;
+      const catName = getCategoryName || function() { return ""; };
+
+      if (results.length === 0) {
+        dropdown.innerHTML = '<div class="search-dd-empty">No products found for "' + escapeHtml(query) + '"</div>';
+      } else {
+        var html = "";
+        for (var i = 0; i < results.length; i++) {
+          var p = results[i];
+          var img = (p.thumbnail || (p.images && p.images[0]) || "");
+          html += '<a href="product.html?id=' + p.id + '" class="search-dd-item">';
+          html += '<img class="search-dd-img" src="' + img + '" alt="' + escapeHtml(p.name) + '" loading="lazy">';
+          html += '<div class="search-dd-info">';
+          html += '<span class="search-dd-name">' + escapeHtml(p.name) + '</span>';
+          html += '<span class="search-dd-cat">' + escapeHtml(catName(p.categoryId)) + '</span>';
+          html += '</div>';
+          html += '<span class="search-dd-price">' + CONFIG.CURRENCY_SYMBOL + p.price.toFixed(2) + '</span>';
+          html += '</a>';
+        }
+        html += '<a href="' + buildShopURL(query, category) + '" class="search-dd-viewall">View All Results</a>';
+        dropdown.innerHTML = html;
+      }
+      dropdown.classList.add("active");
+      dropdown.setAttribute("aria-hidden", "false");
+    } catch(err) {
+      console.error("Search dropdown error:", err);
     }
-    dropdown.classList.add("active");
-    dropdown.setAttribute("aria-hidden", "false");
   }
 
   function closeDropdown() {
@@ -475,12 +490,12 @@ function initSearch() {
     dropdown.setAttribute("aria-hidden", "true");
   }
 
-  searchInput.addEventListener("input", () => {
+  searchInput.addEventListener("input", function() {
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(showDropdown, CONFIG.SEARCH_DEBOUNCE_MS);
   });
 
-  searchInput.addEventListener("keydown", (e) => {
+  searchInput.addEventListener("keydown", function(e) {
     if (e.key === "Escape") {
       closeDropdown();
       searchInput.blur();
@@ -490,14 +505,14 @@ function initSearch() {
     }
   });
 
-  searchInput.addEventListener("focus", () => {
+  searchInput.addEventListener("focus", function() {
     if (searchInput.value.trim().length >= 2) {
       showDropdown();
     }
   });
 
   if (searchBtn) {
-    searchBtn.addEventListener("click", (e) => {
+    searchBtn.addEventListener("click", function(e) {
       e.preventDefault();
       e.stopPropagation();
       navigateToShop();
@@ -505,15 +520,21 @@ function initSearch() {
   }
 
   if (searchCategorySelect) {
-    searchCategorySelect.addEventListener("change", () => {
+    searchCategorySelect.addEventListener("change", function() {
       clearTimeout(debounceTimer);
-      if (searchInput.value.trim().length >= 2) {
+      var query = searchInput.value.trim();
+      if (query.length >= 2) {
         debounceTimer = setTimeout(showDropdown, 100);
+      } else {
+        var category = searchCategorySelect.value;
+        if (category) {
+          window.location.href = buildShopURL("", category);
+        }
       }
     });
   }
 
-  document.addEventListener("click", (e) => {
+  document.addEventListener("click", function(e) {
     if (!e.target.closest(".header-search") && !e.target.closest(".search-results-dropdown")) {
       closeDropdown();
     }

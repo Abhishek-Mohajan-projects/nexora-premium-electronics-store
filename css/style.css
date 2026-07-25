@@ -176,8 +176,9 @@ input, textarea, select {
   align-items: center;
   border: 2px solid var(--border);
   border-radius: var(--radius-sm);
-  overflow: hidden;
+  overflow: visible;
   transition: border-color var(--transition);
+  position: relative;
 }
 
 .header-search:focus-within {
@@ -280,8 +281,7 @@ input, textarea, select {
 .search-results-dropdown {
   position: absolute;
   top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
   width: 100%;
   max-width: 620px;
   background: #fff;

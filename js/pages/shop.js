@@ -7,6 +7,8 @@ async function initShopPage() {
   const categoryParam = getUrlParam("category");
   if (categoryParam) {
     currentFilters.category = categoryParam;
+    const catSelect = document.querySelector(".search-category-select");
+    if (catSelect) catSelect.value = categoryParam;
   }
 
   const subcategoryParam = getUrlParam("subcategory");
@@ -24,6 +26,8 @@ async function initShopPage() {
   const searchParam = getUrlParam("q");
   if (searchParam) {
     currentFilters.search = searchParam;
+    const searchInput = document.querySelector(".header-search-input");
+    if (searchInput) searchInput.value = searchParam;
   }
 
   renderCategoryFilters();
