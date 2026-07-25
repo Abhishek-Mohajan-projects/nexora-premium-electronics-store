@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Shop the best deals and discounts at NEXORA. Save big on premium electronics.">
+  <title>Deals - NEXORA</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <div class="header-wrapper"></div>
+
+  <main class="page">
+    <div class="page-header">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html">Home</a>
+        <span aria-hidden="true">/</span>
+        <span>Deals</span>
+      </nav>
+      <h1>Hot Deals & Discounts</h1>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 4px;">Save big on premium electronics - limited time offers</p>
+    </div>
+
+    <section class="section">
+      <div class="container">
+        <div class="deals-banner" id="deals-banner"></div>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top: 0;">
+      <div class="container">
+        <div class="shop-toolbar">
+          <span class="shop-result-count" id="result-count"></span>
+          <div class="shop-sort">
+            <select id="sort-select" aria-label="Sort products">
+              <option value="discount">Biggest Discount</option>
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
+              <option value="rating">Highest Rated</option>
+              <option value="newest">Newest</option>
+            </select>
+          </div>
+        </div>
+        <div class="deals-categories" id="deals-categories"></div>
+        <div class="products-grid" id="deals-grid"></div>
+        <div class="empty-state" id="no-results" style="display:none;">
+          <div class="empty-state-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+          <h2>No deals found</h2>
+          <p>Check back soon for new offers!</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="newsletter-strip">
+      <div class="container newsletter-strip-inner">
+        <div class="newsletter-strip-left">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <div>
+            <h3>Get Exclusive Deals</h3>
+            <p>Subscribe for member-only discounts and flash sales.</p>
+          </div>
+        </div>
+        <form class="newsletter-strip-form" id="deals-newsletter-form">
+          <input type="email" placeholder="Enter your email" required aria-label="Email address">
+          <button type="submit" class="btn btn-primary">Subscribe</button>
+        </form>
+      </div>
+      <p class="newsletter-success" id="deals-newsletter-success">Welcome! Check your inbox for a welcome discount.</p>
+    </section>
+  </main>
+
+  <div class="footer-wrapper"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/data/categories.js"></script>
+  <script src="js/data/products.js"></script>
+  <script src="js/services/productService.js"></script>
+  <script src="js/services/cartService.js"></script>
+  <script src="js/services/wishlistService.js"></script>
+  <script src="js/services/authService.js"></script>
+  <script src="js/services/orderService.js"></script>
+  <script src="js/components/toast.js"></script>
+  <script src="js/components/modal.js"></script>
+  <script src="js/components/productCard.js"></script>
+  <script src="js/components/header.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    let currentSort = "discount";
+    let currentCategory = "";
+
+    async function initDealsPage() {
+      initHeader();
+      APP.init();
+
+      await renderDealsBanner();
+      renderCategoryFilters();
+      await loadProducts();
+
+      document.getElementById("sort-select")?.addEventListener("change", async (e) => {
+        currentSort = e.target.value;
+        await loadProducts();
+      });
+
+      document.getElementById("deals-newsletter-form")?.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const input = e.target.querySelector("input");
+        const email = input?.value.trim();
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          showToast("Please enter a valid email.", "error");
+          return;
+        }
+        e.target.style.display = "none";
+        document.getElementById("deals-newsletter-success").style.display = "block";
+        showToast("Welcome! Check your inbox for a welcome discount.");
+      });
+    }
+
+    async function renderDealsBanner() {
+      const banner = document.getElementById("deals-banner");
+      if (!banner) return;
+
+      const discounted = await ProductService.getDiscountedProducts(1);
+      const deal = discounted[0];
+      if (!deal) return;
+
+      const discount = Math.round(((deal.compareAtPrice - deal.price) / deal.compareAtPrice) * 100);
+      const savings = (deal.compareAtPrice - deal.price).toFixed(2);
+
+      banner.innerHTML = `
+        <div class="deals-banner-card">
+          <div class="deals-banner-content">
+            <span class="deals-banner-eyebrow">DEAL OF THE DAY</span>
+            <h2>${deal.name}</h2>
+            <p class="deals-banner-desc">${deal.description}</p>
+            <div class="deals-banner-prices">
+              <span class="deals-banner-price">${CONFIG.CURRENCY_SYMBOL}${deal.price.toFixed(2)}</span>
+              <span class="deals-banner-old-price">${CONFIG.CURRENCY_SYMBOL}${deal.compareAtPrice.toFixed(2)}</span>
+              <span class="deals-banner-savings">Save $${savings}</span>
+            </div>
+            <div class="deals-banner-countdown" id="deals-countdown">
+              <p>Offer ends in:</p>
+              <div class="countdown-timer">
+                <div class="cd-block"><span class="cd-num" id="cd-hours">08</span><span class="cd-label">Hours</span></div>
+                <div class="cd-sep">:</div>
+                <div class="cd-block"><span class="cd-num" id="cd-mins">45</span><span class="cd-label">Mins</span></div>
+                <div class="cd-sep">:</div>
+                <div class="cd-block"><span class="cd-num" id="cd-secs">30</span><span class="cd-label">Secs</span></div>
+              </div>
+            </div>
+            <a href="product.html?id=${deal.id}" class="btn btn-primary">Shop This Deal</a>
+          </div>
+          <div class="deals-banner-image">
+            <span class="deals-banner-discount">-${discount}%</span>
+            <img src="${deal.thumbnail}" alt="${deal.name}" loading="eager">
+          </div>
+        </div>
+      `;
+
+      startCountdown();
+    }
+
+    function startCountdown() {
+      let totalSeconds = 8 * 3600 + 45 * 60 + 30;
+      function update() {
+        const h = Math.floor(totalSeconds / 3600);
+        const m = Math.floor((totalSeconds % 3600) / 60);
+        const s = totalSeconds % 60;
+        const hoursEl = document.getElementById("cd-hours");
+        const minsEl = document.getElementById("cd-mins");
+        const secsEl = document.getElementById("cd-secs");
+        if (hoursEl) hoursEl.textContent = String(h).padStart(2, "0");
+        if (minsEl) minsEl.textContent = String(m).padStart(2, "0");
+        if (secsEl) secsEl.textContent = String(s).padStart(2, "0");
+        if (totalSeconds > 0) {
+          totalSeconds--;
+          setTimeout(update, 1000);
+        }
+      }
+      update();
+    }
+
+    function renderCategoryFilters() {
+      const container = document.getElementById("deals-categories");
+      if (!container) return;
+      const discountedCounts = {};
+      CATEGORIES.forEach(cat => {
+        discountedCounts[cat.id] = PRODUCTS.filter(p => p.categoryId === cat.id && p.compareAtPrice && p.compareAtPrice > p.price).length;
+      });
+      const totalDiscounted = PRODUCTS.filter(p => p.compareAtPrice && p.compareAtPrice > p.price).length;
+
+      container.innerHTML = `
+        <button class="na-cat-btn active" data-category="">All Deals (${totalDiscounted})</button>
+        ${CATEGORIES.filter(cat => discountedCounts[cat.id] > 0).map(cat => `
+          <button class="na-cat-btn" data-category="${cat.id}">${cat.name} (${discountedCounts[cat.id]})</button>
+        `).join("")}
+      `;
+
+      container.querySelectorAll(".na-cat-btn").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          container.querySelectorAll(".na-cat-btn").forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+          currentCategory = btn.dataset.category;
+          await loadProducts();
+        });
+      });
+    }
+
+    async function loadProducts() {
+      const filters = { sort: currentSort };
+      if (currentCategory) filters.category = currentCategory;
+
+      let products = await ProductService.getProducts(filters);
+      products = products.filter(p => p.compareAtPrice && p.compareAtPrice > p.price);
+
+      if (currentSort === "discount") {
+        products.sort((a, b) => {
+          const dA = ((a.compareAtPrice - a.price) / a.compareAtPrice);
+          const dB = ((b.compareAtPrice - b.price) / b.compareAtPrice);
+          return dB - dA;
+        });
+      }
+
+      const grid = document.getElementById("deals-grid");
+      const noResults = document.getElementById("no-results");
+      const count = document.getElementById("result-count");
+
+      if (count) count.textContent = `${products.length} deal${products.length !== 1 ? 's' : ''} available`;
+
+      if (products.length === 0) {
+        grid.innerHTML = "";
+        noResults.style.display = "block";
+      } else {
+        noResults.style.display = "none";
+        grid.innerHTML = products.map(renderProductCard).join("");
+        initWishlistBadges();
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", initDealsPage);
+  </script>
+</body>
+</html>

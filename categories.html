@@ -20,9 +20,18 @@
         <span>Categories</span>
       </nav>
       <h1>Product Categories</h1>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 4px;">Explore our curated collections across 5 categories</p>
     </div>
     <div class="container">
       <div class="categories-page-grid" id="categories-grid"></div>
+
+      <section class="section" style="padding-top: 0;">
+        <div class="section-header">
+          <p class="section-label">TRENDING NOW</p>
+          <h2 class="section-title">Popular Across Categories</h2>
+        </div>
+        <div class="products-grid" id="popular-products"></div>
+      </section>
     </div>
   </main>
 
@@ -47,30 +56,74 @@
       APP.init();
 
       const grid = document.getElementById("categories-grid");
+      const iconMap = {
+        "power-charging": '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
+        "mobile-productivity": '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>',
+        "audio": '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3z"/></svg>',
+        "smart-living": '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',
+        "travel-essentials": '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>'
+      };
+
       grid.innerHTML = CATEGORIES.map(cat => {
         const products = PRODUCTS.filter(p => p.categoryId === cat.id);
-        const displayProducts = products.slice(0, 4);
+        const displayProducts = products.slice(0, 5);
+        const icon = iconMap[cat.id] || iconMap["power-charging"];
+        const avgPrice = (products.reduce((sum, p) => sum + p.price, 0) / products.length).toFixed(0);
+        const avgRating = (products.reduce((sum, p) => sum + p.rating, 0) / products.length).toFixed(1);
 
         return `
           <div class="category-page-card">
-            <div class="category-page-header">
+            <div class="category-page-header" style="position:relative; overflow:hidden;">
+              <div class="category-page-icon">${icon}</div>
               <h2>${cat.name}</h2>
               <p>${cat.description}</p>
+              <div class="category-page-stats">
+                <span>${products.length} Products</span>
+                <span class="category-page-dot">·</span>
+                <span>From $${avgPrice}</span>
+                <span class="category-page-dot">·</span>
+                <span>★ ${avgRating}</span>
+              </div>
+            </div>
+            <div class="category-page-subcategories">
+              ${cat.subcategories ? cat.subcategories.map(sub => {
+                const subCount = products.filter(p => p.subcategoryId === sub.id).length;
+                return `<a href="shop.html?category=${cat.id}&subcategory=${sub.id}" class="category-page-sub-link">${sub.name} <span class="category-page-sub-count">${subCount}</span></a>`;
+              }).join("") : ""}
             </div>
             <div class="category-page-products">
-              ${displayProducts.map(p => `
-                <div class="category-page-product">
-                  <a href="product.html?id=${p.id}">${p.name}</a>
-                  <span>${CONFIG.CURRENCY_SYMBOL}${p.price.toFixed(2)}</span>
-                </div>
-              `).join("")}
+              ${displayProducts.map(p => {
+                const discount = p.compareAtPrice ? Math.round(((p.compareAtPrice - p.price) / p.compareAtPrice) * 100) : 0;
+                return `
+                  <div class="category-page-product">
+                    <a href="product.html?id=${p.id}">
+                      <span class="category-page-product-name">${p.name}</span>
+                    </a>
+                    <div class="category-page-product-right">
+                      ${discount > 0 ? `<span class="category-page-product-discount">-${discount}%</span>` : ""}
+                      <span class="category-page-product-price">${CONFIG.CURRENCY_SYMBOL}${p.price.toFixed(2)}</span>
+                    </div>
+                  </div>
+                `;
+              }).join("")}
+              ${products.length > 5 ? `<div class="category-page-more">${products.length - 5} more products...</div>` : ""}
             </div>
-            <a href="shop.html?category=${cat.id}" class="category-page-link">
-              View All ${cat.name} (${products.length})
-            </a>
+            <div class="category-page-footer">
+              <a href="shop.html?category=${cat.id}" class="btn btn-outline btn-sm btn-full">
+                View All ${cat.name}
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </a>
+            </div>
           </div>
         `;
       }).join("");
+
+      const popularProducts = await ProductService.getBestsellerProducts(8);
+      const popularGrid = document.getElementById("popular-products");
+      if (popularGrid && popularProducts.length) {
+        popularGrid.innerHTML = popularProducts.map(renderProductCard).join("");
+        initWishlistBadges();
+      }
     });
   </script>
 </body>

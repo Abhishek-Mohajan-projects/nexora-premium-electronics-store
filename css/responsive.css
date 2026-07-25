@@ -616,6 +616,72 @@
     max-height: 220px;
   }
 
+  .na-hero-card {
+    grid-template-columns: 1fr;
+  }
+
+  .na-hero-content {
+    padding: 28px 20px;
+  }
+
+  .na-hero-content h2 {
+    font-size: 1.3rem;
+  }
+
+  .na-hero-image {
+    padding: 20px;
+    min-height: 180px;
+  }
+
+  .na-hero-image img {
+    max-height: 160px;
+  }
+
+  .na-hero-actions {
+    flex-direction: column;
+  }
+
+  .deals-banner-card {
+    grid-template-columns: 1fr;
+  }
+
+  .deals-banner-content {
+    padding: 28px 20px;
+  }
+
+  .deals-banner-content h2 {
+    font-size: 1.3rem;
+  }
+
+  .deals-banner-image {
+    padding: 20px;
+    min-height: 180px;
+  }
+
+  .deals-banner-image img {
+    max-height: 160px;
+  }
+
+  .deals-banner-discount {
+    top: 12px;
+    right: 12px;
+    padding: 6px 12px;
+    font-size: 0.9rem;
+  }
+
+  .new-arrivals-categories,
+  .deals-categories {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 8px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .na-cat-btn {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
   .promo-popup-content {
     grid-template-columns: 1fr;
   }
@@ -797,5 +863,35 @@
 
   .promo-popup-form {
     flex-direction: column;
+  }
+
+  .about-hero-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .about-hero-text h2 {
+    font-size: 1.5rem;
+  }
+
+  .about-hero-stats {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .about-mission-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-values-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-story-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .deals-banner-countdown .countdown-timer {
+    display: inline-flex;
   }
 }

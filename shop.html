@@ -22,8 +22,19 @@
       <h1>Shop All Products</h1>
     </div>
     <div class="container">
+      <button class="mobile-filter-toggle btn btn-outline btn-sm" id="mobile-filter-toggle">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="14" y2="12"/><line x1="4" y1="18" x2="10" y2="18"/></svg>
+        Filters
+      </button>
+      <div class="active-filters" id="active-filters" style="display:none;"></div>
       <div class="shop-layout">
-        <aside class="shop-sidebar" aria-label="Filters">
+        <aside class="shop-sidebar" id="shop-sidebar" aria-label="Filters">
+          <div class="shop-sidebar-header">
+            <h3>Filters</h3>
+            <button class="shop-sidebar-close" id="shop-sidebar-close" aria-label="Close filters">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
           <div class="filter-group">
             <h3>Category</h3>
             <div id="filter-categories"></div>

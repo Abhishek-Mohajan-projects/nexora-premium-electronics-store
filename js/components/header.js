@@ -113,8 +113,8 @@ function renderHeader() {
     { href: "index.html", label: "Home" },
     { href: "shop.html", label: "Shop", mega: "shop" },
     { href: "categories.html", label: "Categories", mega: "categories" },
-    { href: "shop.html?sort=newest", label: "New Arrivals" },
-    { href: "shop.html?sort=featured", label: "Deals" },
+    { href: "new-arrivals.html", label: "New Arrivals" },
+    { href: "deals.html", label: "Deals" },
     { href: "about.html", label: "About" }
   ];
 
@@ -243,9 +243,9 @@ function renderHeader() {
           </div>
           <div class="mobile-drawer-body">
             <nav class="mobile-drawer-nav">
-              <a href="shop.html?sort=featured" class="mobile-drawer-link mobile-drawer-link--highlight">Value of the Day</a>
-              <a href="shop.html?sort=featured" class="mobile-drawer-link mobile-drawer-link--highlight">Top 100 Offers</a>
-              <a href="shop.html?sort=newest" class="mobile-drawer-link mobile-drawer-link--highlight">New Arrivals</a>
+              <a href="deals.html" class="mobile-drawer-link mobile-drawer-link--highlight">Value of the Day</a>
+              <a href="deals.html" class="mobile-drawer-link mobile-drawer-link--highlight">Top 100 Offers</a>
+              <a href="new-arrivals.html" class="mobile-drawer-link mobile-drawer-link--highlight">New Arrivals</a>
             </nav>
             <div class="mobile-drawer-sep"></div>
             <div class="mobile-drawer-cats">
@@ -359,7 +359,7 @@ function renderFooter() {
           <ul class="footer-links">
             <li><a href="shop.html?sort=featured">Best Sellers</a></li>
             <li><a href="shop.html?sort=newest">New Arrivals</a></li>
-            <li><a href="shop.html?tags=featured">Deals</a></li>
+            <li><a href="deals.html">Deals</a></li>
             <li><a href="about.html">About Us</a></li>
             <li><a href="contact.html">Contact</a></li>
             <li><a href="#">Blog</a></li>

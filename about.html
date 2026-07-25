@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="About NEXORA - Our story, mission, and values.">
+  <meta name="description" content="About NEXORA - Our story, mission, values, and the team behind thoughtful technology.">
   <title>About - NEXORA</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/components.css">
@@ -21,36 +21,166 @@
       </nav>
       <h1>About NEXORA</h1>
     </div>
-    <div class="about-content">
-      <h2>Our Story</h2>
-      <p>NEXORA was born from a simple idea: technology should make your life better, not more complicated. We noticed that the tech market was flooded with products that prioritized specs over real-world usefulness.</p>
-      <p>We set out to create a different kind of technology brand. One that focuses on thoughtfully designed, practical electronics that genuinely improve your everyday life.</p>
 
-      <h2>Our Mission</h2>
-      <p>To curate and deliver technology products that are genuinely useful, beautifully designed, and built to last. We believe great technology should be accessible, reliable, and feel natural to use.</p>
-
-      <div class="about-values">
-        <div class="about-value">
-          <h3>Quality First</h3>
-          <p>Every product we offer is tested and verified for quality, durability, and real-world performance.</p>
-        </div>
-        <div class="about-value">
-          <h3>Thoughtful Design</h3>
-          <p>We believe great design is invisible. Our products just work, naturally fitting into your daily routine.</p>
-        </div>
-        <div class="about-value">
-          <h3>Honest Pricing</h3>
-          <p>No inflated markups. We price our products fairly so you get genuine value for your money.</p>
+    <section class="about-hero">
+      <div class="container">
+        <div class="about-hero-grid">
+          <div class="about-hero-text">
+            <p class="about-hero-eyebrow">OUR STORY</p>
+            <h2>Technology that makes your life better</h2>
+            <p>NEXORA was born from a simple idea: technology should make your life better, not more complicated. We noticed that the tech market was flooded with products that prioritized specs over real-world usefulness.</p>
+            <p>We set out to create a different kind of technology brand. One that focuses on thoughtfully designed, practical electronics that genuinely improve your everyday life.</p>
+          </div>
+          <div class="about-hero-stats">
+            <div class="about-stat">
+              <span class="about-stat-number" data-count="${PRODUCTS.length}">${PRODUCTS.length}</span>
+              <span class="about-stat-label">Products</span>
+            </div>
+            <div class="about-stat">
+              <span class="about-stat-number" data-count="${CATEGORIES.length}">${CATEGORIES.length}</span>
+              <span class="about-stat-label">Categories</span>
+            </div>
+            <div class="about-stat">
+              <span class="about-stat-number">50K+</span>
+              <span class="about-stat-label">Happy Customers</span>
+            </div>
+            <div class="about-stat">
+              <span class="about-stat-number">4.7</span>
+              <span class="about-stat-label">Avg Rating</span>
+            </div>
+          </div>
         </div>
       </div>
+    </section>
 
-      <h2>What We Stand For</h2>
-      <p>In a world of planned obsolescence, we choose to champion products that are built to last. In a market of feature overload, we focus on what actually matters. In an era of disposable tech, we curate items worth keeping.</p>
-      <p>Whether you're setting up a productive workspace, packing for a trip, or automating your home, NEXORA has the right tools for the job.</p>
+    <section class="about-mission">
+      <div class="container">
+        <div class="about-mission-grid">
+          <div class="about-mission-card">
+            <div class="about-mission-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+            </div>
+            <h3>Our Mission</h3>
+            <p>To curate and deliver technology products that are genuinely useful, beautifully designed, and built to last. We believe great technology should be accessible, reliable, and feel natural to use.</p>
+          </div>
+          <div class="about-mission-card">
+            <div class="about-mission-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            </div>
+            <h3>Our Vision</h3>
+            <p>To become the most trusted name in everyday technology, known for quality, honesty, and products that genuinely improve people's lives.</p>
+          </div>
+          <div class="about-mission-card">
+            <div class="about-mission-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <h3>Our Promise</h3>
+            <p>We promise to never stop searching for the best technology products for everyday life. Every item in our store represents our commitment to quality, utility, and thoughtful design.</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-      <h2>Our Promise</h2>
-      <p>We promise to never stop searching for the best technology products for everyday life. Every item in our store represents our commitment to quality, utility, and thoughtful design.</p>
-    </div>
+    <section class="about-values">
+      <div class="container">
+        <div class="section-header">
+          <p class="section-label">WHAT WE STAND FOR</p>
+          <h2 class="section-title">Our Core Values</h2>
+        </div>
+        <div class="about-values-grid">
+          <div class="about-value-card">
+            <div class="about-value-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            </div>
+            <h3>Quality First</h3>
+            <p>Every product we offer is tested and verified for quality, durability, and real-world performance. We never compromise on build quality.</p>
+          </div>
+          <div class="about-value-card">
+            <div class="about-value-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 6v6l4 2"/></svg>
+            </div>
+            <h3>Thoughtful Design</h3>
+            <p>We believe great design is invisible. Our products just work, naturally fitting into your daily routine without complexity.</p>
+          </div>
+          <div class="about-value-card">
+            <div class="about-value-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+            <h3>Honest Pricing</h3>
+            <p>No inflated markups. We price our products fairly so you get genuine value for your money. No hidden fees, no tricks.</p>
+          </div>
+          <div class="about-value-card">
+            <div class="about-value-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <h3>Built to Last</h3>
+            <p>In a world of planned obsolescence, we champion products that are built to last. Durability is not optional - it's essential.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="about-story">
+      <div class="container">
+        <div class="about-story-grid">
+          <div class="about-story-content">
+            <p class="section-label">OUR JOURNEY</p>
+            <h2>What We Stand For</h2>
+            <p>In a world of planned obsolescence, we choose to champion products that are built to last. In a market of feature overload, we focus on what actually matters. In an era of disposable tech, we curate items worth keeping.</p>
+            <p>Whether you're setting up a productive workspace, packing for a trip, or automating your home, NEXORA has the right tools for the job.</p>
+            <div class="about-story-highlights">
+              <div class="about-highlight">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Curated selection of premium products</span>
+              </div>
+              <div class="about-highlight">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Free shipping on orders over $50</span>
+              </div>
+              <div class="about-highlight">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>30-day hassle-free returns</span>
+              </div>
+              <div class="about-highlight">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Dedicated customer support</span>
+              </div>
+            </div>
+          </div>
+          <div class="about-story-visual">
+            <div class="about-category-showcase" id="about-category-showcase"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <p class="section-label">FEATURED PRODUCTS</p>
+          <h2 class="section-title">Discover Our Best</h2>
+          <p class="section-desc">Explore what makes NEXORA different.</p>
+        </div>
+        <div class="products-grid" id="about-featured-products"></div>
+      </div>
+    </section>
+
+    <section class="newsletter-strip">
+      <div class="container newsletter-strip-inner">
+        <div class="newsletter-strip-left">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <div>
+            <h3>Join the NEXORA Community</h3>
+            <p>Get exclusive offers and product updates.</p>
+          </div>
+        </div>
+        <form class="newsletter-strip-form" id="about-newsletter-form">
+          <input type="email" placeholder="Enter your email" required aria-label="Email address">
+          <button type="submit" class="btn btn-primary">Subscribe</button>
+        </form>
+      </div>
+      <p class="newsletter-success" id="about-newsletter-success">Thanks for subscribing! Check your inbox for a welcome message.</p>
+    </section>
   </main>
 
   <div class="footer-wrapper"></div>
@@ -69,9 +199,69 @@
   <script src="js/components/header.js"></script>
   <script src="js/app.js"></script>
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("DOMContentLoaded", async () => {
       initHeader();
       APP.init();
+
+      const showcase = document.getElementById("about-category-showcase");
+      if (showcase) {
+        showcase.innerHTML = CATEGORIES.map(cat => {
+          const count = PRODUCTS.filter(p => p.categoryId === cat.id).length;
+          return `
+            <a href="shop.html?category=${cat.id}" class="about-showcase-item">
+              <img src="${cat.image}" alt="${cat.name}" loading="lazy">
+              <div>
+                <span class="about-showcase-name">${cat.name}</span>
+                <span class="about-showcase-count">${count} products</span>
+              </div>
+            </a>
+          `;
+        }).join("");
+      }
+
+      const featured = await ProductService.getFeaturedProducts(4);
+      const grid = document.getElementById("about-featured-products");
+      if (grid && featured.length) {
+        grid.innerHTML = featured.map(renderProductCard).join("");
+        initWishlistBadges();
+      }
+
+      document.getElementById("about-newsletter-form")?.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const input = e.target.querySelector("input");
+        const email = input?.value.trim();
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          showToast("Please enter a valid email.", "error");
+          return;
+        }
+        e.target.style.display = "none";
+        document.getElementById("about-newsletter-success").style.display = "block";
+        showToast("Subscribed successfully!");
+      });
+
+      const stats = document.querySelectorAll(".about-stat-number[data-count]");
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const el = entry.target;
+            const target = parseInt(el.dataset.count);
+            if (isNaN(target)) return;
+            let current = 0;
+            const step = Math.max(1, Math.floor(target / 30));
+            const timer = setInterval(() => {
+              current += step;
+              if (current >= target) {
+                current = target;
+                clearInterval(timer);
+              }
+              el.textContent = current;
+            }, 30);
+            observer.unobserve(el);
+          }
+        });
+      }, { threshold: 0.5 });
+
+      stats.forEach(stat => observer.observe(stat));
     });
   </script>
 </body>

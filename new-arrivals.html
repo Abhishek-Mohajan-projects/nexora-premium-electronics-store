@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Discover the latest products at NEXORA. New arrivals across Power, Audio, Productivity, Smart Living, and Travel.">
+  <title>New Arrivals - NEXORA</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <div class="header-wrapper"></div>
+
+  <main class="page">
+    <div class="page-header">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html">Home</a>
+        <span aria-hidden="true">/</span>
+        <span>New Arrivals</span>
+      </nav>
+      <h1>New Arrivals</h1>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 4px;">Be the first to get your hands on our latest products</p>
+    </div>
+
+    <section class="section">
+      <div class="container">
+        <div class="new-arrivals-hero" id="new-arrivals-hero"></div>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top: 0;">
+      <div class="container">
+        <div class="shop-toolbar">
+          <span class="shop-result-count" id="result-count"></span>
+          <div class="shop-sort">
+            <select id="sort-select" aria-label="Sort products">
+              <option value="newest">Newest First</option>
+              <option value="featured">Featured</option>
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
+              <option value="rating">Highest Rated</option>
+            </select>
+          </div>
+        </div>
+        <div class="new-arrivals-categories" id="na-categories"></div>
+        <div class="products-grid" id="new-arrivals-grid"></div>
+      </div>
+    </section>
+
+    <section class="newsletter-strip">
+      <div class="container newsletter-strip-inner">
+        <div class="newsletter-strip-left">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <div>
+            <h3>Never Miss a Drop</h3>
+            <p>Get notified when new products arrive.</p>
+          </div>
+        </div>
+        <form class="newsletter-strip-form" id="na-newsletter-form">
+          <input type="email" placeholder="Enter your email" required aria-label="Email address">
+          <button type="submit" class="btn btn-primary">Subscribe</button>
+        </form>
+      </div>
+      <p class="newsletter-success" id="na-newsletter-success">Thanks for subscribing! You'll be the first to know.</p>
+    </section>
+  </main>
+
+  <div class="footer-wrapper"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/data/categories.js"></script>
+  <script src="js/data/products.js"></script>
+  <script src="js/services/productService.js"></script>
+  <script src="js/services/cartService.js"></script>
+  <script src="js/services/wishlistService.js"></script>
+  <script src="js/services/authService.js"></script>
+  <script src="js/services/orderService.js"></script>
+  <script src="js/components/toast.js"></script>
+  <script src="js/components/modal.js"></script>
+  <script src="js/components/productCard.js"></script>
+  <script src="js/components/header.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    let currentSort = "newest";
+    let currentCategory = "";
+
+    async function initNewArrivals() {
+      initHeader();
+      APP.init();
+
+      const heroProducts = await ProductService.getNewArrivals(3);
+      renderNewArrivalsHero(heroProducts);
+      renderCategoryFilters();
+      await loadProducts();
+
+      document.getElementById("sort-select")?.addEventListener("change", async (e) => {
+        currentSort = e.target.value;
+        await loadProducts();
+      });
+
+      document.getElementById("na-newsletter-form")?.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const input = e.target.querySelector("input");
+        const email = input?.value.trim();
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          showToast("Please enter a valid email.", "error");
+          return;
+        }
+        e.target.style.display = "none";
+        document.getElementById("na-newsletter-success").style.display = "block";
+        showToast("Subscribed! Check your inbox.");
+      });
+    }
+
+    function renderNewArrivalsHero(products) {
+      const hero = document.getElementById("new-arrivals-hero");
+      if (!hero || !products.length) return;
+
+      const newest = products[0];
+      const discount = newest.compareAtPrice ? Math.round(((newest.compareAtPrice - newest.price) / newest.compareAtPrice) * 100) : 0;
+
+      hero.innerHTML = `
+        <div class="na-hero-card">
+          <div class="na-hero-content">
+            <span class="na-hero-badge">Just Launched</span>
+            <h2>${newest.name}</h2>
+            <p>${newest.description}</p>
+            <div class="na-hero-price">
+              <span class="price-current large">${CONFIG.CURRENCY_SYMBOL}${newest.price.toFixed(2)}</span>
+              ${newest.compareAtPrice ? `<span class="price-compare">${CONFIG.CURRENCY_SYMBOL}${newest.compareAtPrice.toFixed(2)}</span>` : ""}
+              ${discount > 0 ? `<span class="product-discount-badge" style="position:static;">-${discount}%</span>` : ""}
+            </div>
+            <div class="na-hero-actions">
+              <a href="product.html?id=${newest.id}" class="btn btn-primary">View Product</a>
+              <button class="btn btn-outline btn-add-to-cart" data-product-id="${newest.id}">Add to Cart</button>
+            </div>
+          </div>
+          <div class="na-hero-image">
+            <img src="${newest.thumbnail}" alt="${newest.name}" loading="eager">
+          </div>
+        </div>
+      `;
+    }
+
+    function renderCategoryFilters() {
+      const container = document.getElementById("na-categories");
+      if (!container) return;
+      container.innerHTML = `
+        <button class="na-cat-btn active" data-category="">All</button>
+        ${CATEGORIES.map(cat => {
+          const count = PRODUCTS.filter(p => p.categoryId === cat.id && p.createdAt >= "2025-03-01").length;
+          return `<button class="na-cat-btn" data-category="${cat.id}">${cat.name} <span>${count}</span></button>`;
+        }).join("")}
+      `;
+
+      container.querySelectorAll(".na-cat-btn").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          container.querySelectorAll(".na-cat-btn").forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+          currentCategory = btn.dataset.category;
+          await loadProducts();
+        });
+      });
+    }
+
+    async function loadProducts() {
+      const filters = { sort: currentSort };
+      if (currentCategory) filters.category = currentCategory;
+
+      const allProducts = await ProductService.getProducts(filters);
+      const newArrivals = allProducts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+      const grid = document.getElementById("new-arrivals-grid");
+      const count = document.getElementById("result-count");
+
+      if (count) count.textContent = `${newArrivals.length} new product${newArrivals.length !== 1 ? 's' : ''}`;
+
+      if (newArrivals.length === 0) {
+        grid.innerHTML = `<div class="empty-state"><h2>No new arrivals in this category</h2><p>Check back soon for updates.</p></div>`;
+      } else {
+        grid.innerHTML = newArrivals.map(renderProductCard).join("");
+        initWishlistBadges();
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", initNewArrivals);
+  </script>
+</body>
+</html>

@@ -40,7 +40,7 @@ function renderHeroSidebar() {
   sidebar.innerHTML = allCategories.map((cat, i) => {
     const icon = cat.icon ? iconMap[cat.icon] : iconMap.bolt;
     const hasSubcategories = cat.subcategories && cat.subcategories.length > 0;
-    const baseUrl = cat.id === 'featured' ? 'shop.html?sort=featured' : cat.id === 'bestsellers' ? 'shop.html?sort=featured' : cat.id === 'new' ? 'shop.html?sort=newest' : 'shop.html?category=' + cat.id;
+    const baseUrl = cat.id === 'featured' ? 'shop.html?sort=featured' : cat.id === 'bestsellers' ? 'deals.html' : cat.id === 'new' ? 'new-arrivals.html' : 'shop.html?category=' + cat.id;
 
     if (hasSubcategories) {
       const subLinks = cat.subcategories.map(sub =>
