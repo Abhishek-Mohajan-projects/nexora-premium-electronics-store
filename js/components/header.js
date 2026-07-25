@@ -452,17 +452,20 @@ function initSearch() {
         return;
       }
 
-      dropdown.classList.add("is-loading");
-      dropdown.innerHTML = "";
+      var skeletonHTML = '<div class="search-dd-item skeleton-item"><div class="skeleton-img"></div><div class="skeleton-text"><div class="skeleton-line skeleton-line-short"></div><div class="skeleton-line skeleton-line-tiny"></div></div><div class="skeleton-line skeleton-price"></div></div>';
+      skeletonHTML += '<div class="search-dd-item skeleton-item"><div class="skeleton-img"></div><div class="skeleton-text"><div class="skeleton-line skeleton-line-short"></div><div class="skeleton-line skeleton-line-tiny"></div></div><div class="skeleton-line skeleton-price"></div></div>';
+      skeletonHTML += '<div class="search-dd-item skeleton-item"><div class="skeleton-img"></div><div class="skeleton-text"><div class="skeleton-line skeleton-line-short"></div><div class="skeleton-line skeleton-line-tiny"></div></div><div class="skeleton-line skeleton-price"></div></div>';
+
+      dropdown.innerHTML = skeletonHTML;
       dropdown.classList.add("active");
       dropdown.setAttribute("aria-hidden", "false");
+
+      await new Promise(function(r) { setTimeout(r, 400); });
 
       let results = await ProductService.searchProducts(query);
       if (category) {
         results = results.filter(function(p) { return p.categoryId === category; });
       }
-
-      dropdown.classList.remove("is-loading");
 
       const catName = getCategoryName || function() { return ""; };
 
