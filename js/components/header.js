@@ -423,19 +423,23 @@ function initSearch() {
 
   let debounceTimer;
 
-  function getSearchURL() {
-    const query = searchInput.value.trim();
-    const category = searchCategorySelect ? searchCategorySelect.value : "";
-    if (!query) return null;
+  function buildShopURL(query, category) {
     const params = new URLSearchParams();
-    params.set("q", query);
+    if (query) params.set("q", query);
     if (category) params.set("category", category);
     return "shop.html?" + params.toString();
   }
 
-  const showDropdown = async () => {
+  function navigateToShop() {
     const query = searchInput.value.trim();
     const category = searchCategorySelect ? searchCategorySelect.value : "";
+    window.location.href = buildShopURL(query, category);
+  }
+
+  async function showDropdown() {
+    const query = searchInput.value.trim();
+    const category = searchCategorySelect ? searchCategorySelect.value : "";
+
     if (query.length < 2) {
       dropdown.innerHTML = "";
       dropdown.classList.remove("active");
@@ -449,47 +453,40 @@ function initSearch() {
     }
 
     if (results.length === 0) {
-      dropdown.innerHTML = '<div class="search-dd-empty">No products found</div>';
+      dropdown.innerHTML = `<div class="search-dd-empty">No products found for "${escapeHtml(query)}"</div>`;
     } else {
       dropdown.innerHTML = results.map(p => `
         <a href="product.html?id=${p.id}" class="search-dd-item">
-          <img class="search-dd-img" src="${p.thumbnail || p.images?.[0] || ''}" alt="${p.name}" loading="lazy">
+          <img class="search-dd-img" src="${p.thumbnail || p.images?.[0] || ''}" alt="${escapeHtml(p.name)}" loading="lazy">
           <div class="search-dd-info">
-            <span class="search-dd-name">${p.name}</span>
-            <span class="search-dd-cat">${getCategoryName(p.categoryId)}</span>
+            <span class="search-dd-name">${escapeHtml(p.name)}</span>
+            <span class="search-dd-cat">${escapeHtml(getCategoryName(p.categoryId))}</span>
           </div>
           <span class="search-dd-price">${CONFIG.CURRENCY_SYMBOL}${p.price.toFixed(2)}</span>
         </a>
-      `).join("") + `<a href="${getSearchURL() || '#'}" class="search-dd-viewall">View All Results</a>`;
+      `).join("") + `<a href="${buildShopURL(query, category)}" class="search-dd-viewall">View All Results</a>`;
     }
     dropdown.classList.add("active");
     dropdown.setAttribute("aria-hidden", "false");
-  };
-
-  function navigateToSearch() {
-    const url = getSearchURL();
-    if (url) {
-      dropdown.classList.remove("active");
-      window.location.href = url;
-    }
   }
 
-  function onSearchChange() {
+  function closeDropdown() {
+    dropdown.classList.remove("active");
+    dropdown.setAttribute("aria-hidden", "true");
+  }
+
+  searchInput.addEventListener("input", () => {
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(showDropdown, CONFIG.SEARCH_DEBOUNCE_MS);
-  }
-
-  searchInput.addEventListener("input", onSearchChange);
+  });
 
   searchInput.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
-      dropdown.classList.remove("active");
-      dropdown.setAttribute("aria-hidden", "true");
+      closeDropdown();
       searchInput.blur();
-    }
-    if (e.key === "Enter") {
+    } else if (e.key === "Enter") {
       e.preventDefault();
-      navigateToSearch();
+      navigateToShop();
     }
   });
 
@@ -499,21 +496,26 @@ function initSearch() {
     }
   });
 
-  searchCategorySelect?.addEventListener("change", () => {
-    if (searchInput.value.trim().length >= 2) {
-      showDropdown();
-    }
-  });
+  if (searchBtn) {
+    searchBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      navigateToShop();
+    });
+  }
 
-  searchBtn?.addEventListener("click", (e) => {
-    e.preventDefault();
-    navigateToSearch();
-  });
+  if (searchCategorySelect) {
+    searchCategorySelect.addEventListener("change", () => {
+      clearTimeout(debounceTimer);
+      if (searchInput.value.trim().length >= 2) {
+        debounceTimer = setTimeout(showDropdown, 100);
+      }
+    });
+  }
 
   document.addEventListener("click", (e) => {
-    if (!e.target.closest(".header-search")) {
-      dropdown.classList.remove("active");
-      dropdown.setAttribute("aria-hidden", "true");
+    if (!e.target.closest(".header-search") && !e.target.closest(".search-results-dropdown")) {
+      closeDropdown();
     }
   });
 }
