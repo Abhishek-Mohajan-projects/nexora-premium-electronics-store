@@ -423,7 +423,17 @@ function initSearch() {
 
   let debounceTimer;
 
-  const performSearch = async () => {
+  function getSearchURL() {
+    const query = searchInput.value.trim();
+    const category = searchCategorySelect ? searchCategorySelect.value : "";
+    if (!query) return null;
+    const params = new URLSearchParams();
+    params.set("q", query);
+    if (category) params.set("category", category);
+    return "shop.html?" + params.toString();
+  }
+
+  const showDropdown = async () => {
     const query = searchInput.value.trim();
     const category = searchCategorySelect ? searchCategorySelect.value : "";
     if (query.length < 2) {
@@ -456,9 +466,17 @@ function initSearch() {
     dropdown.setAttribute("aria-hidden", "false");
   };
 
+  function navigateToSearch() {
+    const url = getSearchURL();
+    if (url) {
+      dropdown.classList.remove("active");
+      window.location.href = url;
+    }
+  }
+
   searchInput.addEventListener("input", () => {
     clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(performSearch, CONFIG.SEARCH_DEBOUNCE_MS);
+    debounceTimer = setTimeout(showDropdown, CONFIG.SEARCH_DEBOUNCE_MS);
   });
 
   searchInput.addEventListener("keydown", (e) => {
@@ -469,11 +487,17 @@ function initSearch() {
     }
     if (e.key === "Enter") {
       e.preventDefault();
-      performSearch();
+      navigateToSearch();
     }
   });
 
-  searchBtn?.addEventListener("click", performSearch);
+  searchInput.addEventListener("focus", () => {
+    if (searchInput.value.trim().length >= 2) {
+      showDropdown();
+    }
+  });
+
+  searchBtn?.addEventListener("click", navigateToSearch);
 
   document.addEventListener("click", (e) => {
     if (!e.target.closest(".header-search")) {
