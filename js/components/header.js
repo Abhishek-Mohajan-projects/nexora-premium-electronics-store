@@ -460,7 +460,7 @@ function initSearch() {
           </div>
           <span class="search-dd-price">${CONFIG.CURRENCY_SYMBOL}${p.price.toFixed(2)}</span>
         </a>
-      `).join("") + `<a href="shop.html?q=${encodeURIComponent(query)}" class="search-dd-viewall">View All Results</a>`;
+      `).join("") + `<a href="${getSearchURL() || '#'}" class="search-dd-viewall">View All Results</a>`;
     }
     dropdown.classList.add("active");
     dropdown.setAttribute("aria-hidden", "false");
@@ -474,10 +474,12 @@ function initSearch() {
     }
   }
 
-  searchInput.addEventListener("input", () => {
+  function onSearchChange() {
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(showDropdown, CONFIG.SEARCH_DEBOUNCE_MS);
-  });
+  }
+
+  searchInput.addEventListener("input", onSearchChange);
 
   searchInput.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
@@ -497,7 +499,16 @@ function initSearch() {
     }
   });
 
-  searchBtn?.addEventListener("click", navigateToSearch);
+  searchCategorySelect?.addEventListener("change", () => {
+    if (searchInput.value.trim().length >= 2) {
+      showDropdown();
+    }
+  });
+
+  searchBtn?.addEventListener("click", (e) => {
+    e.preventDefault();
+    navigateToSearch();
+  });
 
   document.addEventListener("click", (e) => {
     if (!e.target.closest(".header-search")) {
