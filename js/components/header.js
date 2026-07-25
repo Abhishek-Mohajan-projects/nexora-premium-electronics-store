@@ -447,14 +447,12 @@ function initSearch() {
 
       if (query.length < 2) {
         dropdown.innerHTML = "";
-        dropdown.classList.remove("active", "is-loading");
+        dropdown.classList.remove("active");
         dropdown.setAttribute("aria-hidden", "true");
         return;
       }
 
-      var skeletonHTML = '<div class="search-dd-item skeleton-item"><div class="skeleton-img"></div><div class="skeleton-text"><div class="skeleton-line skeleton-line-short"></div><div class="skeleton-line skeleton-line-tiny"></div></div><div class="skeleton-line skeleton-price"></div></div>';
-      skeletonHTML += '<div class="search-dd-item skeleton-item"><div class="skeleton-img"></div><div class="skeleton-text"><div class="skeleton-line skeleton-line-short"></div><div class="skeleton-line skeleton-line-tiny"></div></div><div class="skeleton-line skeleton-price"></div></div>';
-      skeletonHTML += '<div class="search-dd-item skeleton-item"><div class="skeleton-img"></div><div class="skeleton-text"><div class="skeleton-line skeleton-line-short"></div><div class="skeleton-line skeleton-line-tiny"></div></div><div class="skeleton-line skeleton-price"></div></div>';
+      var skeletonHTML = '<div class="search-loading-overlay"><div class="search-spinner"><div class="spinner-ring"></div><div class="spinner-ring"></div><div class="spinner-ring"></div><span class="spinner-text">Searching...</span></div></div>';
 
       dropdown.innerHTML = skeletonHTML;
       dropdown.classList.add("active");
@@ -496,7 +494,7 @@ function initSearch() {
   }
 
   function closeDropdown() {
-    dropdown.classList.remove("active", "is-loading");
+    dropdown.classList.remove("active");
     dropdown.setAttribute("aria-hidden", "true");
   }
 
